@@ -1,0 +1,13 @@
+name: Projet_web
+title: Projet_web
+username:
+account: hamel-amir
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8223821
+bundleId: 6854669
+url: https://hamel-amir.shinyapps.io/Projet_web/
+when: 1676568247.26503
+lastSyncTime: 1676568247.26505
+asMultiple: FALSE
+asStatic: FALSE
