@@ -23,13 +23,13 @@ univaree_server <- function(input,output, df) {
   # })
   # liste de variables quantitatives
   output$quantlist = renderUI({
-    selectInput('radio', 'Le choix de la variable', names(df)[!grepl('factor|logical|character',sapply(df,class))])
+    selectInput('qnt', 'Le choix de la variable', names(df)[!grepl('factor|logical|character',sapply(df,class))])
   })
   # summary variable quantitative
   output$summary <- renderPrint({
     #print(df)
     dt = df
-    dt2 =dt[,input$radio]
+    dt2 =dt[,input$qnt]
     #print(dt2)
     t(summary.default(as.numeric(as.character(dt2))))
     t(summary(dt2))})
@@ -38,18 +38,18 @@ univaree_server <- function(input,output, df) {
   # Commande pour l'affichage du plot des effectifs
   output$effectifsDiag <- renderPlot({ 
     dt = df
-    plot(table(data.frame(dt[,input$radio])), col ="blue", xlab =sym(input$radio), ylab ="Effectifs", 
+    plot(table(data.frame(dt[,input$qnt])), col ="blue", xlab =sym(input$qnt), ylab ="Effectifs", 
          main ="Distribution des effectifs")
   })
   # boite aux moustaches
   output$boiteMoustaches <- renderPlot({
     # BoÃÂ®te ÃÂ  moustaches
     dt = df
-    boxplot( data.frame(as.numeric(as.character(dt[,input$radio]))), col = grey(0.8), 
+    boxplot( data.frame(as.numeric(as.character(dt[,input$qnt]))), col = grey(0.8), 
              main = " ",
              ylab = "", las = 1)
     # Affichage complÃÂ©mentaires en Y des diffÃÂ©rents ÃÂ¢ges
-    rug(df[,input$radio], side = 2)
+    rug(df[,input$qnt], side = 2)
   })
   
   # Histogramm des effectifs
@@ -58,9 +58,9 @@ univaree_server <- function(input,output, df) {
     dt = df
     
     # Histogramme des effectifs
-    hist(as.numeric(as.character(dt[,input$radio])) , freq = TRUE, cex.axis = 1.5, cex.main = 1.5,
+    hist(as.numeric(as.character(dt[,input$qnt])) , freq = TRUE, cex.axis = 1.5, cex.main = 1.5,
          main = "Histogramme", col = "blue",
-         xlab = sym(input$radio), ylab = "Effectifs", las = 1,
+         xlab = sym(input$qnt), ylab = "Effectifs", las = 1,
          right = FALSE, cex.lab = 1.5)
   })
   
@@ -68,7 +68,7 @@ univaree_server <- function(input,output, df) {
   
   tabCentreDisp <- reactive({
     # Noms des caractéristiques
-    dt =df[,input$radio]
+    dt =df[,input$qnt]
     names.tmp <- c("Maximum", "Minimum", "Moyenne", "Médiane",
                    "1e quartile", "3e quartile", "Variance", "Ecart-type")
     # Calcul des caractéristiques
@@ -89,9 +89,9 @@ univaree_server <- function(input,output, df) {
   output$effectifsHistFreqDens <- renderPlot({
     dt = df
     # Histogramme des densitÃ©s de frÃ©quences
-    hist( as.numeric(as.character(dt[,input$radio])), freq = FALSE, cex.axis = 1.5, cex.main = 1.5,
+    hist( as.numeric(as.character(dt[,input$qnt])), freq = FALSE, cex.axis = 1.5, cex.main = 1.5,
           main = "Histogramme de la variable", col = "green",
-          xlab = dt[1,input$radio] , ylab = "Densité de fréquences", las = 1,
+          xlab = dt[1,input$qnt] , ylab = "Densité de fréquences", las = 1,
           right = FALSE, cex.lab = 1.5)
   })
   
@@ -99,12 +99,12 @@ univaree_server <- function(input,output, df) {
   output$effectifsCumCurve <- renderPlot({
     dt = df
     # RÃ©cupÃ©ration des infos Ã  partir de l'histogramme
-    tmp.hist <- hist(as.numeric(as.character(dt[,input$radio])) , plot = FALSE,
+    tmp.hist <- hist(as.numeric(as.character(dt[,input$qnt])) , plot = FALSE,
                      
                      right = FALSE)
     # Courbe cumulative (effectifs)
     plot(x = tmp.hist$breaks[-1], y = cumsum(tmp.hist$counts),
-         xlab =sym(input$radio),
+         xlab =sym(input$qnt),
          ylab = "Effectifs cumulés", cex.axis = 1.5, cex.lab = 1.5,
          main = "Courbe cumulative ",
          type = "o", col = "green", lwd = 2, cex.main = 1.5)
@@ -211,7 +211,7 @@ univaree_server <- function(input,output, df) {
   # Diagramme en colonnes
   output$colonnes <- renderPlot({
     barplot(effectifs(), main = " ", 
-            xlab=sym(input$radio),
+            xlab=sym(input$qnt),
             ylab="Effectifs", las = 2,
             names.arg = substr(names(effectifs()), 1, 9))
     
