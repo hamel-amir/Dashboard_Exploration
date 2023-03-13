@@ -384,8 +384,8 @@ shinyApp(
                   tabPanel("Statistical Tests", 
                            sidebarLayout(
                              sidebarPanel(
-                               selectInput("cols7", "Choose Varibale 1:", choices = "", selected = " ", multiple = TRUE),
-                               selectInput("cols8", "Choose Varibale 2:", choices = "", selected = " ", multiple = TRUE),
+                               uiOutput('cols7'),
+                               uiOutput('cols8'),
                                radioButtons("normaltest", "Select Method:", choices = c("A-D-Test", "Shapiro", "KS-Test", "MV-Shapiro")),
                                hr(),
                                helpText("For more details visit:"),
@@ -413,8 +413,8 @@ shinyApp(
                   tabPanel("Correlation", 
                            sidebarLayout(
                              sidebarPanel(
-                               selectInput("cols9", "Choose Variable:", choices = "", selected = " ", multiple = TRUE),
-                               selectInput("cols10", "Choose Variable:", choices = "", selected = " ", multiple = TRUE),
+                               uiOutput('cols9'),
+                               uiOutput('cols10'),
                                radioButtons("cormethod", "Select Method:", choices = c("Covariance", "KarlPearson", "Spearman", "Kendals")),
                                hr(),
                                helpText("For Details Visit:"),
@@ -510,7 +510,7 @@ shinyApp(
                                       )
                                       ),
                                     conditionalPanel(
-                                      condition = "input.imputationQ == 'r'",
+                                      condition = "input.imputationQ == 'r'"
                                       
                                     )
                                     
@@ -1912,7 +1912,7 @@ shinyApp(
                              scrollX = 500,
                              
                              #deferRender = TRUE,
-                             scroller = TRUE),
+                             scroller = TRUE)
               
               
             )
@@ -2230,7 +2230,7 @@ shinyApp(
               plot(df[,strCol], type='l', pch=16, col='green', xlab='nombre de lignes', ylab='valeurs')
               
               legend(x = "topright",          # Position
-                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),""),  # Legend texts
+                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),"") # Legend texts
                      
               ) 
               
@@ -2791,8 +2791,10 @@ shinyApp(
     testset = reactive({HR_trandata [-indexes(),]})
     
     balanced_trainset = reactive({
-      #SMOTE(Attrition~., data = one_hot(), perc.over=100)
+      #SMOTE(Attrition~., data = one_hot(), perc.over=100, perc.under = 80)
       one_hot()
+      
+      
     })
     svm_type = reactive({
       if(input$choice_type == "nu-classification"){
@@ -3483,11 +3485,15 @@ shinyApp(
     
     # Statistical Tests
     
-    observeEvent(input$file1, {
-      updateSelectInput(session, inputId = "cols7", choices = colnames(data()))
-      updateSelectInput(session, inputId = "cols8", choices = colnames(data()))
-    }
-    )
+    output$cols7<- renderUI({
+      selectInput('cols7', 'Choisir une variable ',colnames(data()))
+      
+    })
+    output$cols8<- renderUI({
+      selectInput('cols8', 'Choisir une variable ',colnames(data()))
+      
+    })
+    
     
     output$qqp <- renderPlot({
       df <- data()
@@ -3540,11 +3546,15 @@ shinyApp(
     )
     # correlation & regression 
     
-    observeEvent(input$file1, {
-      updateSelectInput(session, inputId = "cols9", choices = colnames(data()))
-      updateSelectInput(session, inputId = "cols10", choices = colnames(data()))
-    }
-    )
+    output$cols9<- renderUI({
+      selectInput('cols9', 'Choisir une variable ',colnames(data()))
+      
+    })
+    output$cols10<- renderUI({
+      selectInput('cols10', 'Choisir une variable ',colnames(data()))
+      
+    })
+    
     
     cortest <- reactive({
       var1 <- data()[,input$cols9]
