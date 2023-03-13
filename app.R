@@ -27,6 +27,26 @@ library(dplyr)
 library(mice)
 library(caret)
 library("partykit")
+library(nortest)
+library(mvnormtest)
+library(MASS)
+library(shinyLP)
+library(class)
+library(gmodels)
+library(caret)
+library(rattle)
+library(ranger)
+library(klaR)
+library(kernlab)
+#library(micad)                       #package for anomaly detection
+library(e1071)
+library(anomaly)
+library(NeuralNetTools)
+library(neuralnet)
+library(nnet)
+library(mclust)
+library(rsconnect)
+library(packrat)
 
 source('./Server moduls/Univariee.R')
 source('./Server moduls/Bivaree.R')
@@ -216,7 +236,7 @@ library(shinycssloaders)
 library(caret)
 library(tidyr)
 library(NbClust) 
-  
+
 library(shiny)
 library(shinydashboard)
 library(shinydashboardPlus)
@@ -321,7 +341,7 @@ shinyApp(
                  
                  
         ),
-        
+        menuItem("Tests statistiques", tabName = "stest", icon = icon("table")),
         menuItem("Analyse Univariée", tabName="datanalys", icon=icon("chart-line"),
                  
                  menuSubItem("Quantitative et Qualitative", tabName = "Unv", icon=icon("dice-one"))
@@ -359,6 +379,60 @@ shinyApp(
                 fluidPage(
                 )
         ),
+        tabItem(tabName = "stest",
+                fluidPage(
+                  tabPanel("Statistical Tests", 
+                           sidebarLayout(
+                             sidebarPanel(
+                               selectInput("cols7", "Choose Varibale 1:", choices = "", selected = " ", multiple = TRUE),
+                               selectInput("cols8", "Choose Varibale 2:", choices = "", selected = " ", multiple = TRUE),
+                               radioButtons("normaltest", "Select Method:", choices = c("A-D-Test", "Shapiro", "KS-Test", "MV-Shapiro")),
+                               hr(),
+                               helpText("For more details visit:"),
+                               a(href="https://en.wikipedia.org/wiki/Anderson%E2%80%93Darling_test", "Anderson-Darling test"), br(),
+                               a(href="https://en.wikipedia.org/wiki/Shapiro%E2%80%93Wilk_test", "Shapiro-Wilk test"), br(),
+                               a(href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test", "Kolmogorov-Smirnov test"), br(),
+                               
+                               hr()
+                             ), 
+                             mainPanel(
+                               h3("Statistical Tests"),
+                               fluidRow(
+                                 div(
+                                   plotOutput("qqp")
+                                 ),
+                                 div(
+                                   verbatimTextOutput("normtest")
+                                 )
+                               )
+                             )
+                             
+                           )
+                  ),
+                  
+                  tabPanel("Correlation", 
+                           sidebarLayout(
+                             sidebarPanel(
+                               selectInput("cols9", "Choose Variable:", choices = "", selected = " ", multiple = TRUE),
+                               selectInput("cols10", "Choose Variable:", choices = "", selected = " ", multiple = TRUE),
+                               radioButtons("cormethod", "Select Method:", choices = c("Covariance", "KarlPearson", "Spearman", "Kendals")),
+                               hr(),
+                               helpText("For Details Visit:"),
+                               a(href="https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient", "Karl Pearson Correlation Test"),
+                               hr()
+                             ), 
+                             mainPanel(
+                               h3("Covariance & Correlation"),
+                               verbatimTextOutput("cor_t")
+                             )
+                             
+                           )
+                           
+                  )
+                
+                
+                )
+        ),
         tabItem(tabName = "imp",
                 fluidPage(
                   column(12,
@@ -390,12 +464,12 @@ shinyApp(
                                       condition = "input.imputation == 'Sc'",
                                       textOutput("resultat_Sc"),
                                       tags$head(tags$style("#resultat_Sc{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                                           font-size: 20px;
+                                                           font-style: italic;
+                                                           }"
                                       )
                                       )
-                                    ),
+                                      ),
                                     conditionalPanel(
                                       condition = "input.imputation == 'Id'",
                                       plotOutput("resultat_Id")
@@ -407,7 +481,7 @@ shinyApp(
                                     
                                     
                                     
-                           ),
+                                      ),
                            tabPanel("Variable Qualitative",
                                     uiOutput('qualistM'),
                                     radioButtons("imputationQ", "MÃ©thode d'imputation",
@@ -429,19 +503,19 @@ shinyApp(
                                       condition = "input.imputationQ == 'sup'",
                                       textOutput("resultat_sup"),
                                       tags$head(tags$style("#resultat_sup{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                                           font-size: 20px;
+                                                           font-style: italic;
+                                                           }"
                                       )
                                       )
-                                    ),
+                                      ),
                                     conditionalPanel(
                                       condition = "input.imputationQ == 'r'",
                                       
                                     )
                                     
+                                      )
                            )
-                         )
                          
                          
                          
@@ -450,663 +524,663 @@ shinyApp(
                   )
                   
                   
-                )
-        ),
-        
-        tabItem(tabName = "out",
-                fluidPage(
-                  column(12,
-                         tabBox(
-                           width = 12,
-                           tabPanel("Traitement des outliers",
-                                    uiOutput('OutList'),
-                                    textOutput("outlier"),
-                                    radioButtons("Out", "Vous voulez supprimer la valeur ?",
-                                                 c("Non" = "Non",
-                                                   "Oui" = "Oui",
-                                                   "Afficher la valeur"="Af"
-                                                   
-                                                 )),
-                                    #actionButton("deleteRows", "spl"),
-                                    DT::dataTableOutput("tab_outliers"),
-                                    conditionalPanel(
-                                      condition = "input.Out == 'Oui'",
-                                      textOutput("resultat_Oui")
-                                    )
-                           )
+      )
+                  ),
+      
+      tabItem(tabName = "out",
+              fluidPage(
+                column(12,
+                       tabBox(
+                         width = 12,
+                         tabPanel("Traitement des outliers",
+                                  uiOutput('OutList'),
+                                  textOutput("outlier"),
+                                  radioButtons("Out", "Vous voulez supprimer la valeur ?",
+                                               c("Non" = "Non",
+                                                 "Oui" = "Oui",
+                                                 "Afficher la valeur"="Af"
+                                                 
+                                               )),
+                                  #actionButton("deleteRows", "spl"),
+                                  DT::dataTableOutput("tab_outliers"),
+                                  conditionalPanel(
+                                    condition = "input.Out == 'Oui'",
+                                    textOutput("resultat_Oui")
+                                  )
                          )
-                  )
+                       )
                 )
-        ),
-        tabItem(tabName = "nm",
-                fluidPage(
-                  column(12,
-                         tabBox(width = 12,
-                                tabPanel("Normalisation",
-                                         uiOutput('NList'),
-                                         radioButtons("normalisation", "MÃ©thodes de normalisation",
-                                                      c("Normalisation Min-Max" = "Nm",
-                                                        "Normalisation du score z"="Nz",
-                                                        "Visualisation des donnÃ©es"="Vsd"
-                                                        
-                                                        
-                                                        
-                                                      ),selected = FALSE)),
-                                conditionalPanel(
-                                  condition = "input.normalisation == 'Nm'",
-                                  textOutput("resultat_Nm"),
-                                  tags$head(tags$style("#resultat_Nm{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+              )
+      ),
+      tabItem(tabName = "nm",
+              fluidPage(
+                column(12,
+                       tabBox(width = 12,
+                              tabPanel("Normalisation",
+                                       uiOutput('NList'),
+                                       radioButtons("normalisation", "MÃ©thodes de normalisation",
+                                                    c("Normalisation Min-Max" = "Nm",
+                                                      "Normalisation du score z"="Nz",
+                                                      "Visualisation des donnÃ©es"="Vsd"
+                                                      
+                                                      
+                                                      
+                                                    ),selected = FALSE)),
+                              conditionalPanel(
+                                condition = "input.normalisation == 'Nm'",
+                                textOutput("resultat_Nm"),
+                                tags$head(tags$style("#resultat_Nm{color:  green;
+                                                     font-size: 20px;
+                                                     font-style: italic;
+                                                     }"
                                   )
-                                  ),
-                                  plotOutput("visualisation_Nm")
                                 ),
-                                conditionalPanel(
-                                  condition = "input.normalisation == 'Nz'",
-                                  textOutput("resultat_Nz"),
-                                  tags$head(tags$style("#resultat_Nz{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                plotOutput("visualisation_Nm")
+                                ),
+                              conditionalPanel(
+                                condition = "input.normalisation == 'Nz'",
+                                textOutput("resultat_Nz"),
+                                tags$head(tags$style("#resultat_Nz{color:  green;
+                                                     font-size: 20px;
+                                                     font-style: italic;
+                                                     }"
                                   )
-                                  ),
-                                  plotOutput("visualisation_Nz")
                                 ),
-                                conditionalPanel(
-                                  condition = "input.normalisation == 'Vsd'",
-                                  plotOutput("visualisation_N")
-                                  
-                                )
+                                plotOutput("visualisation_Nz")
+                                ),
+                              conditionalPanel(
+                                condition = "input.normalisation == 'Vsd'",
+                                plotOutput("visualisation_N")
                                 
-                         )
-                  )
-                )
-        ),
-        tabItem(tabName = "dm",
-                fluidPage(
-                  column(12,
-                         tabBox(width = 12,
-                                tabPanel("dimmufication",
-                                         uiOutput('dmList'),
-                                         
-                                         radioButtons("dm", "Vous voulez appliquer la dummification ?",
-                                                      c("Non" = "Non",
-                                                        "Oui" = "Oui"
-                                                        
-                                                        
-                                                      )),
-                                         
-                                         conditionalPanel(
-                                           condition = "input.dm == 'Oui'",
-                                           textOutput("resultat_dm"),
-                                           tags$head(tags$style("#resultat_dm{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                              )
+                              
+                                )
+                              )
+                       )
+      ),
+      tabItem(tabName = "dm",
+              fluidPage(
+                column(12,
+                       tabBox(width = 12,
+                              tabPanel("dimmufication",
+                                       uiOutput('dmList'),
+                                       
+                                       radioButtons("dm", "Vous voulez appliquer la dummification ?",
+                                                    c("Non" = "Non",
+                                                      "Oui" = "Oui"
+                                                      
+                                                      
+                                                    )),
+                                       
+                                       conditionalPanel(
+                                         condition = "input.dm == 'Oui'",
+                                         textOutput("resultat_dm"),
+                                         tags$head(tags$style("#resultat_dm{color:  green;
+                                                              font-size: 20px;
+                                                              font-style: italic;
+                                                              }"
                                            ) ),
-                                           textOutput("resultat_dm2"),
-                                           tags$head(tags$style("#resultat_dm2{color: red;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                         textOutput("resultat_dm2"),
+                                         tags$head(tags$style("#resultat_dm2{color: red;
+                                                              font-size: 20px;
+                                                              font-style: italic;
+                                                              }"
                                            ) )
-                                           
-                                           
-                                           
-                                           
-                                           
+                                         
+                                         
+                                         
+                                         
+                                         
                                          )
-                                )
-                                
-                         ))
-                )
-        ),
-        tabItem(tabName = "rb",
-                fluidPage(
-                  column(
-                    12,
-                    tabBox(width = 12,
-                           tabPanel("rÃ©equilibrage de classes",
-                                    uiOutput('reList'),
+                                         )
+                              
+                                         ))
+              )
+      ),
+      tabItem(tabName = "rb",
+              fluidPage(
+                column(
+                  12,
+                  tabBox(width = 12,
+                         tabPanel("rÃ©equilibrage de classes",
+                                  uiOutput('reList'),
+                                  
+                                  radioButtons("re", "choisissez la mÃ©thode de rÃ©echantillonnage ?",
+                                               c("visualisez la distribition de la classe"="Vc",
+                                                 "over-sampling" = "Over",
+                                                 "under-sampling" = "Under"
+                                                 
+                                                 
+                                                 
+                                               ),selected = FALSE),
+                                  
+                                  conditionalPanel(
+                                    condition = "input.re == 'Vc'",
+                                    plotOutput("Vc")
                                     
-                                    radioButtons("re", "choisissez la mÃ©thode de rÃ©echantillonnage ?",
-                                                 c("visualisez la distribition de la classe"="Vc",
-                                                   "over-sampling" = "Over",
-                                                   "under-sampling" = "Under"
-                                                   
-                                                   
-                                                   
-                                                 ),selected = FALSE),
+                                  ),
+                                  conditionalPanel(
+                                    condition = "input.re == 'Over'",
+                                    textOutput("resultat_Over"),
+                                    textOutput("resultat_Over2"),
+                                    tags$head(tags$style("#resultat_Over{color:  green;
+                                                         font-size: 20px;
+                                                         font-style: italic;
+                                                         }"
+                                      ) ),
+                                    tags$head(tags$style("#resultat_Over2{color:  red;
+                                                         font-size: 20px;
+                                                         font-style: italic;
+                                                         }"
+                                      ) )
                                     
-                                    conditionalPanel(
-                                      condition = "input.re == 'Vc'",
-                                      plotOutput("Vc")
-                                      
                                     ),
-                                    conditionalPanel(
-                                      condition = "input.re == 'Over'",
-                                      textOutput("resultat_Over"),
-                                      textOutput("resultat_Over2"),
-                                      tags$head(tags$style("#resultat_Over{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                  conditionalPanel(
+                                    condition = "input.re == 'Under'",
+                                    textOutput("resultat_Under"),
+                                    textOutput("resultat_Under2"),
+                                    tags$head(tags$style("#resultat_Under{color:  green;
+                                                         font-size: 20px;
+                                                         font-style: italic;
+                                                         }"
                                       ) ),
-                                      tags$head(tags$style("#resultat_Over2{color:  red;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                    tags$head(tags$style("#resultat_Under2{color:  red;
+                                                         font-size: 20px;
+                                                         font-style: italic;
+                                                         }"
                                       ) )
-                                      
+                                    
                                     ),
-                                    conditionalPanel(
-                                      condition = "input.re == 'Under'",
-                                      textOutput("resultat_Under"),
-                                      textOutput("resultat_Under2"),
-                                      tags$head(tags$style("#resultat_Under{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                  conditionalPanel(
+                                    condition = "input.re == 'Both'",
+                                    textOutput("resultat_Both"),
+                                    textOutput("resultat_Both2"),
+                                    tags$head(tags$style("#resultat_Both{color:  green;
+                                                         font-size: 20px;
+                                                         font-style: italic;
+                                                         }"
                                       ) ),
-                                      tags$head(tags$style("#resultat_Under2{color:  red;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
+                                    tags$head(tags$style("#resultat_Both2{color:  red;
+                                                         font-size: 20px;
+                                                         font-style: italic;
+                                                         }"
                                       ) )
-                                      
-                                    ),
-                                    conditionalPanel(
-                                      condition = "input.re == 'Both'",
-                                      textOutput("resultat_Both"),
-                                      textOutput("resultat_Both2"),
-                                      tags$head(tags$style("#resultat_Both{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
-                                      ) ),
-                                      tags$head(tags$style("#resultat_Both2{color:  red;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
-                                      ) )
-                                      
+                                    
                                     )
-                                    
-                                    
-                           )
+                                  
+                                  
+                                    )
+                                  )
+                                  )
+                                    )
+                                    ),
+      tabItem(tabName = "f",
+              fluidPage(
+                column( 
+                  width = 12,
+                  tabBox(
+                    width = 12,
+                    tabPanel("Variable Quantitative",
+                             tableOutput("caract_quantitative"),
+                             textOutput("amir")
+                             
+                             
+                             
+                             
+                    ),
+                    tabPanel("Variable Qualitative",
+                             tableOutput("caract_qualitative")
+                    ),
+                    
+                    tabPanel("Renommer les attributs",
+                             uiOutput('renameList'),
+                             textInput("Id", "saisir le nouveau nom"),
+                             actionButton("Save","Enregistrer"),
+                             textOutput("rename"),
+                             tags$head(tags$style("#rename{color:  green;
+                                                  font-size: 20px;
+                                                  font-style: italic;
+                                                  }"
+                               ) )
+                             ),
+                    tabPanel("MAJ les valeurs d'un attribut",
+                             uiOutput('attList'),
+                             uiOutput('valList'),
+                             textInput("Id2", "saisir la nouvelle valeur"),
+                             uiOutput('typeList'),
+                             
+                             actionButton("MAJ","MAJ"),
+                             textOutput("MAJtxt"),
+                             tags$head(tags$style("#MAJtxt{color:  green;
+                                                  font-size: 20px;
+                                                  font-style: italic;
+                                                  }"
+                               ) )
+                             )
+                    
+                    
+                    
+                    
+                    
+                    
+                             )
+                             )
                     )
-                  )
+      ),
+      tabItem(tabName = "Sm",
+              fluidPage(
+                fluidRow(
+                  column(12,
+                         htmlOutput("sumariz1"))
                 )
-        ),
-        tabItem(tabName = "f",
-                fluidPage(
+              )
+      ),
+      tabItem(tabName = "cr",
+              fluidPage(
+                column(12,
+                       tabBox(width = 12,
+                              tabPanel("Heatmap correlation",
+                                       textOutput("soustxt"),
+                                       textOutput("Theatmap"),
+                                       tags$head(tags$style("#Theatmap{color:  red;
+                                                            font-size: 20px;
+                                                            font-style: italic;
+                                                            }"
+                                         )
+                                       ),
+                                       plotlyOutput("heatmap")
+                                       )
+                              
+                                       )
+                              )
+                
+                )
+                ),
+      
+      tabItem(tabName = "Dataset",
+              fluidPage(
+                fluidRow(
+                  column(width = 6,infoBoxOutput(width = 12,"nbrlignes")),
+                  column(width = 6,infoBoxOutput(width = 12,"nbrcolonnes")),
+                  column(
+                    width = 12,
+                    box(title = "Table", solidHeader = TRUE, width = 12,
+                        collapsible = TRUE,div(DT::dataTableOutput("table1"))
+                    )
+                    
+                  )
+                  
+                )
+                
+              )),
+      
+      tabItem(tabName = "Unv",
+              fluidPage(
+                fluidRow(  
                   column( 
                     width = 12,
                     tabBox(
                       width = 12,
-                      tabPanel("Variable Quantitative",
-                               tableOutput("caract_quantitative"),
-                               textOutput("amir")
+                      
+                      title = "Variables",
+                      # The id lets us use input$tabset1 on the server to find the current tab
+                      id = "tabset1", 
+                      tabPanel("Quantitative", value = "tab_quantitative",
+                               uiOutput('quantlist'),
+                               verbatimTextOutput(outputId = "summary")
+                               
+                               
                                
                                
                                
                                
                       ),
-                      tabPanel("Variable Qualitative",
-                               tableOutput("caract_qualitative"),
-                      ),
-                      
-                      tabPanel("Renommer les attributs",
-                               uiOutput('renameList'),
-                               textInput("Id", "saisir le nouveau nom"),
-                               actionButton("Save","Enregistrer"),
-                               textOutput("rename"),
-                               tags$head(tags$style("#rename{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
-                               ) )
-                      ),
-                      tabPanel("MAJ les valeurs d'un attribut",
-                               uiOutput('attList'),
-                               uiOutput('valList'),
-                               textInput("Id2", "saisir la nouvelle valeur"),
-                               uiOutput('typeList'),
-                               
-                               actionButton("MAJ","MAJ"),
-                               textOutput("MAJtxt"),
-                               tags$head(tags$style("#MAJtxt{color:  green;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
-                               ) )
-                      )
-                      
-                      
-                      
-                      
-                      
-                      
-                    )
-                  )
-                )
-        ),
-        tabItem(tabName = "Sm",
-                fluidPage(
-                  fluidRow(
-                    column(12,
-                           htmlOutput("sumariz1"))
-                  )
-                )
-        ),
-        tabItem(tabName = "cr",
-                fluidPage(
-                  column(12,
-                         tabBox(width = 12,
-                                tabPanel("Heatmap correlation",
-                                         textOutput("soustxt"),
-                                         textOutput("Theatmap"),
-                                         tags$head(tags$style("#Theatmap{color:  red;
-                                                 font-size: 20px;
-                                                 font-style: italic;
-                                                 }"
-                                         )
-                                         ),
-                                         plotlyOutput("heatmap")
-                                )
-                                
-                         )
-                  )
-                  
-                )
-        ),
-        
-        tabItem(tabName = "Dataset",
-                fluidPage(
-                  fluidRow(
-                    column(width = 6,infoBoxOutput(width = 12,"nbrlignes")),
-                    column(width = 6,infoBoxOutput(width = 12,"nbrcolonnes")),
+                      tabPanel("Qualitative", value = "tab_qualitative",
+                               uiOutput('qualist'))
+                    )),
+                  conditionalPanel(
+                    condition = "input.tabset1 == 'tab_quantitative'",
                     column(
                       width = 12,
-                      box(title = "Table", solidHeader = TRUE, width = 12,
-                          collapsible = TRUE,div(DT::dataTableOutput("table1"))
+                      box(
+                        title = "Diagramme en bÃ¢tons des effectifs", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE,
+                        plotOutput(outputId = "effectifsDiag")
+                      ),
+                      box(
+                        title = "Boite aux moustaches", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE,
+                        plotOutput(outputId = "boiteMoustaches")
                       )
                       
-                    )
-                    
-                  )
-                  
-                )),
-        
-        tabItem(tabName = "Unv",
-                fluidPage(
-                  fluidRow(  
-                    column( 
-                      width = 12,
-                      tabBox(
-                        width = 12,
-                        
-                        title = "Variables",
-                        # The id lets us use input$tabset1 on the server to find the current tab
-                        id = "tabset1", 
-                        tabPanel("Quantitative", value = "tab_quantitative",
-                                 uiOutput('quantlist'),
-                                 verbatimTextOutput(outputId = "summary"),
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                        ),
-                        tabPanel("Qualitative", value = "tab_qualitative",
-                                 uiOutput('qualist'))
-                      )),
-                    conditionalPanel(
-                      condition = "input.tabset1 == 'tab_quantitative'",
-                      column(
-                        width = 12,
-                        box(
-                          title = "Diagramme en bÃ¢tons des effectifs", status = "primary", solidHeader = TRUE,
-                          collapsible = TRUE,
-                          plotOutput(outputId = "effectifsDiag")
-                        ),
-                        box(
-                          title = "Boite aux moustaches", status = "primary", solidHeader = TRUE,
-                          collapsible = TRUE,
-                          plotOutput(outputId = "boiteMoustaches")
-                        )
-                        
-                      ),
-                      column(
-                        width = 12,
-                        box(
-                          title = "Histogramme d'effectifs", status = "info", solidHeader = TRUE,
-                          collapsible = TRUE,
-                          plotOutput(outputId = "effectifsHist")
-                        ),
-                        box(
-                          title = "CaractÃ©ristiques de tendance centrale et de dispersion", status = "info", solidHeader = TRUE,
-                          collapsible = TRUE,
-                          tableOutput(outputId = "centreDisp"))
-                      ),
-                      
-                      column(width = 12,
-                             box(
-                               width = 12,
-                               title = "Courbe cumulative", status = "info", solidHeader = TRUE,
-                               collapsible = TRUE,
-                               plotOutput(outputId = "effectifsCumCurve")
-                               
-                             )
-                      )
-                      
-                      
-                    ),
-                    uiOutput("myConditionalPanel"),
-                    
-                    
-                    
-                    
-                  )
-                )
-                
-                
-        ),
-        tabItem(tabName = "Bv",
-                fluidPage(
-                  fluidRow(  
-                    column(
-                      width = 6,
-                      uiOutput('quantlistbi1')
                     ),
                     column(
-                      width = 6,
-                      uiOutput('quantlistbi2')
-                    ),
-                    
-                    column( 
                       width = 12,
-                      tabBox(
-                        width = 12,
-                        
-                        title = "",
-                        # The id lets us use input$tabset1 on the server to find the current tab
-                        id = "tabset1", 
-                        tabPanel("CaractÃ©ristiques", value = "caractÃ©ristiques",
-                                 tableOutput("caract")),
-                        tabPanel("Nuage de point avec la regression linÃ©aire", value = "caractÃ©ristiques",
-                                 plotOutput("nuagePoints"),
-                                 
-                                 textOutput("correlation")
-                                 
-                                 
-                        ),
-                        tabPanel("Nuage de points et Histogrammes", value = "caractÃ©ristiques",
-                                 plotOutput("nuagePointshist")
-                                 
-                                 
-                        ),
-                        tabPanel("Histogrammes dos Ã  dos", value = "caractÃ©ristiques",
-                                 plotOutput("histbackback")
-                                 
-                                 
-                        )
-                        
-                        
-                        
-                        
-                      )
-                    )
-                    
-                  )
-                )
-        ),
-        tabItem(tabName = "vs",
-                fluidPage(
-                  fluidRow( 
-                    column(6,uiOutput('quantlistvs'),
-                           
-                           
+                      box(
+                        title = "Histogramme d'effectifs", status = "info", solidHeader = TRUE,
+                        collapsible = TRUE,
+                        plotOutput(outputId = "effectifsHist")
+                      ),
+                      box(
+                        title = "CaractÃ©ristiques de tendance centrale et de dispersion", status = "info", solidHeader = TRUE,
+                        collapsible = TRUE,
+                        tableOutput(outputId = "centreDisp"))
                     ),
-                    column(6,uiOutput('qualistvs'),
-                           
-                    ),
-                    uiOutput("myConditionalPanel2"),
                     
-                    
-                  )
-                )
-        ),
-        tabItem(tabName = "vs2",
-                fluidPage(
-                  fluidRow( 
-                    column(6,uiOutput('qualistvs1'),
-                           
-                           
-                    ),
-                    column(6,uiOutput('qualistvs2'),
-                           
-                           
-                    ),
-                    uiOutput("myConditionalPanel3")
-                    
-                    
-                  )
-                )
-        ),
-        tabItem(tabName = "Rg",
-                fluidPage(
-                  fluidRow(
-                    column(12,
-                           tabBox(
-                             width = 4,
-                             tabPanel("Choisir le type de regression",
-                                      radioButtons(
-                                        "radio1",
-                                        label = h3("Choisir le type de la regression"),
-                                        choices = list(
-                                          "Linear" = 1,
-                                          "Logistic" = 2
-                                          
-                                        ),
-                                        selected = F
-                                      ),
-                                      uiOutput("select2"),
-                                      uiOutput("select3"),
-                                      actionButton("analysis", "Analyser!"))
-                           ),
-                           conditionalPanel(
-                             "input.radio1 == 1",
-                             tabBox(
-                               width=8,
-                               tabPanel("Model summary",htmlOutput("testq")),
-                               tabPanel("Coefficients plot",plotOutput("lcoef"))
-                               
-                             ),
-                             tabBox(
-                               width=12,
-                               tabPanel("Diagnostics",plotOutput("diag")
-                                        
-                               )
-                               
-                               
-                             )
-                           ),
-                           conditionalPanel(
-                             "input.radio1 == 2",
-                             tabBox(
-                               width=8,
-                               tabPanel("Model summary",htmlOutput("testq2")),
-                               tabPanel("Coefficients plot",plotOutput("logiOdds"))
-                               
-                             ),
-                             tabBox(
-                               width=12,
-                               tabPanel("GOF metrics",verbatimTextOutput("logi_gof")
-                                        
-                               )
-                               
-                               
-                             )
+                    column(width = 12,
+                           box(
+                             width = 12,
+                             title = "Courbe cumulative", status = "info", solidHeader = TRUE,
+                             collapsible = TRUE,
+                             plotOutput(outputId = "effectifsCumCurve")
+                             
                            )
                     )
-                  )
+                    
+                    
+                  ),
+                  uiOutput("myConditionalPanel")
+                  
+                  
+                  
+                  
                 )
-        ),
-        tabItem(tabName = "Rd",
-                fluidPage(
-                  fluidRow(
-                    column(12,
-                           tabBox(
-                             width = 4,
-                             tabPanel("Principal Component Analysis",
-                                      uiOutput("pdd"),
-                                      
-                                      actionButton("analysisPCA", "Analyze!"),
-                                      #useShinyalert(),
-                                      uiOutput("dimA"),
-                                      uiOutput("dimB"),
-                                      uiOutput("clumPCA"),
-                                      uiOutput("Coll"),
-                                      uiOutput("Colls"))
-                           ),
+              )
+              
+              
+      ),
+      tabItem(tabName = "Bv",
+              fluidPage(
+                fluidRow(  
+                  column(
+                    width = 6,
+                    uiOutput('quantlistbi1')
+                  ),
+                  column(
+                    width = 6,
+                    uiOutput('quantlistbi2')
+                  ),
+                  
+                  column( 
+                    width = 12,
+                    tabBox(
+                      width = 12,
+                      
+                      title = "",
+                      # The id lets us use input$tabset1 on the server to find the current tab
+                      id = "tabset1", 
+                      tabPanel("CaractÃ©ristiques", value = "caractÃ©ristiques",
+                               tableOutput("caract")),
+                      tabPanel("Nuage de point avec la regression linÃ©aire", value = "caractÃ©ristiques",
+                               plotOutput("nuagePoints"),
+                               
+                               textOutput("correlation")
+                               
+                               
+                      ),
+                      tabPanel("Nuage de points et Histogrammes", value = "caractÃ©ristiques",
+                               plotOutput("nuagePointshist")
+                               
+                               
+                      ),
+                      tabPanel("Histogrammes dos Ã  dos", value = "caractÃ©ristiques",
+                               plotOutput("histbackback")
+                               
+                               
+                      )
+                      
+                      
+                      
+                      
+                    )
+                  )
+                  
+                )
+              )
+      ),
+      tabItem(tabName = "vs",
+              fluidPage(
+                fluidRow( 
+                  column(6,uiOutput('quantlistvs')
+                         
+                         
+                  ),
+                  column(6,uiOutput('qualistvs')
+                         
+                  ),
+                  uiOutput("myConditionalPanel2")
+                  
+                  
+                )
+              )
+      ),
+      tabItem(tabName = "vs2",
+              fluidPage(
+                fluidRow( 
+                  column(6,uiOutput('qualistvs1')
+                         
+                         
+                  ),
+                  column(6,uiOutput('qualistvs2')
+                         
+                         
+                  ),
+                  uiOutput("myConditionalPanel3")
+                  
+                  
+                )
+              )
+      ),
+      tabItem(tabName = "Rg",
+              fluidPage(
+                fluidRow(
+                  column(12,
+                         tabBox(
+                           width = 4,
+                           tabPanel("Choisir le type de regression",
+                                    radioButtons(
+                                      "radio1",
+                                      label = h3("Choisir le type de la regression"),
+                                      choices = list(
+                                        "Linear" = 1,
+                                        "Logistic" = 2
+                                        
+                                      ),
+                                      selected = F
+                                    ),
+                                    uiOutput("select2"),
+                                    uiOutput("select3"),
+                                    actionButton("analysis", "Analyser!"))
+                         ),
+                         conditionalPanel(
+                           "input.radio1 == 1",
                            tabBox(
                              width=8,
-                             tabPanel(
-                               
-                               plotlyOutput("plotlyPCA", width = "65%"),
-                               
-                               
-                               conditionalPanel(
-                                 condition = "output.plotlyPCA"
-                                 ,
-                                 h4("Summary")
-                                 ,
-                                 h5("Importance")
-                                 ,
-                                 verbatimTextOutput("PC.info")
-                                 ,
-                                 h5("Rotations")
-                                 ,
-                                 verbatimTextOutput("PC.info2")
-                                 
-                               )
+                             tabPanel("Model summary",htmlOutput("testq")),
+                             tabPanel("Coefficients plot",plotOutput("lcoef"))
+                             
+                           ),
+                           tabBox(
+                             width=12,
+                             tabPanel("Diagnostics",plotOutput("diag")
+                                      
                              )
                              
                              
                            )
-                    )
-                  )
-                )
-        ),
-        tabItem(tabName = "ml",
-                fluidPage(
-                  sliderInput("trainsplit", "Portion training:",
-                              min = 0.05, max = 0.95,
-                              value = 0.7, step = 0.05
-                  ),
-                  h3("Choisir les parametres d'entrainement"),
-                  radioButtons("radio",
-                               label="Selectionnez",
-                               choices = list("Over Sampling " = 1, "Under Sampling " = 2,"Sans Sampling" = 3),
-                               selected = 1,
-                               inline = T,
-                               width = "100%"),
-                  tabPanel("Classification",
-                           tabsetPanel(
-                             tabPanel("Random Forest", h1("Random Forest"),fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_RF"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_RF"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_RF"))),plotOutput("Classification_rf")),
-                             tabPanel("Logistic Regression", h1("Logistic Regression"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_LR"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_LR"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_LR"))),plotOutput("classification_lr")),
-                             tabPanel("Decision Tree", h1("Decision Tree"),fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_DT"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_DT"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_DT"))),fluidRow(column(4, h4("Arbre de dÃ©cision :")), column(12, plotOutput("DT_tree"))), h4("Courbe PR:"),plotOutput("Classification_DT")),
-                             tabPanel("SVM", h1("SVM"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_SVM"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_SVM"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_SVM"))),plotOutput("classification_svm")),
-                             tabPanel("KNN", h1("KNN"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_KNN"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_KNN"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_KNN"))),plotOutput("classification_knn")),
-                             tabPanel("LDA", h1("LDA"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_LDA"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_LDA"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_LDA"))),plotOutput("classification_lda")),
-                             tabPanel("Naive Bayes", h1("NB"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_NB"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_NB"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_NB"))),plotOutput("classification_nb"))
+                         ),
+                         conditionalPanel(
+                           "input.radio1 == 2",
+                           tabBox(
+                             width=8,
+                             tabPanel("Model summary",htmlOutput("testq2")),
+                             tabPanel("Coefficients plot",plotOutput("logiOdds"))
+                             
+                           ),
+                           tabBox(
+                             width=12,
+                             tabPanel("GOF metrics",verbatimTextOutput("logi_gof")
+                                      
+                             )
                              
                              
                            )
+                         )
+                  )
+                )
+              )
+      ),
+      tabItem(tabName = "Rd",
+              fluidPage(
+                fluidRow(
+                  column(12,
+                         tabBox(
+                           width = 4,
+                           tabPanel("Principal Component Analysis",
+                                    uiOutput("pdd"),
+                                    
+                                    actionButton("analysisPCA", "Analyze!"),
+                                    #useShinyalert(),
+                                    uiOutput("dimA"),
+                                    uiOutput("dimB"),
+                                    uiOutput("clumPCA"),
+                                    uiOutput("Coll"),
+                                    uiOutput("Colls"))
+                         ),
+                         tabBox(
+                           width=8,
+                           tabPanel(
+                             
+                             plotlyOutput("plotlyPCA", width = "65%"),
+                             
+                             
+                             conditionalPanel(
+                               condition = "output.plotlyPCA"
+                               ,
+                               h4("Summary")
+                               ,
+                               h5("Importance")
+                               ,
+                               verbatimTextOutput("PC.info")
+                               ,
+                               h5("Rotations")
+                               ,
+                               verbatimTextOutput("PC.info2")
+                               
+                             )
+                           )
                            
-                  ))     
-                
-        ),
-        
-        tabItem(
-          tabName = "classification",
-          fluidRow(
-            box(background = "black", textOutput(("ModName")))),
-          fluidRow(
-            
-            selectInput(inputId = "choice_model", label ="Choose a Model", choices = list("Logistic Regression",
-                                                                                          "LDA", "Naive Bayes", "KNN", "Support Vector Machine", "Decision Tree"), selected = "Logistic
-Regression", multiple = FALSE),
-            
-            conditionalPanel(condition = "input.choice_model == 'Support Vector Machine'",
-                             selectInput(inputId = "choice_type", label ="Choose a Machine Type", choices = list("C-classification",
-                                                                                                                 "nu-classification"), selected = "C-classification", multiple = FALSE),
-                             selectInput(inputId = "choice_kernel", label ="Choose a Kernel Type", choices = list("linear",
-                                                                                                                  "polynomial", "radial", "sigmoid"), selected = "polynomial", multiple = FALSE)),
-            conditionalPanel(condition = "input.choice_model == 'Decision Tree'",
-                             sliderInput(inputId = "choice_threshold", label ="Choose Test Statistic Threshold", min = 0.90, max =
-                                           0.99, value = 0.95, step = 0.01),
-                             sliderInput(inputId = "choice_depth", label ="Choose Max Tree Depth", min = 1, max = 30, value = 6,
-                                         step = 1),
-                             sliderInput(inputId = "choice_split", label ="Choose Min Threshold for Splitting", min = 10, max = 200,
-                                         value = 20, step = 1)),
-            
-            
-            conditionalPanel(condition = "input.choice_model == 'Logistic Regression'",
-                             box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
-                                 verbatimTextOutput("ModSummaryLR"), width = 8),
-                             box(title = "Feature Selection Parameters", solidHeader = TRUE, background = "olive", status =
-                                   "primary", checkboxGroupInput(inputId = "choice_indvar", label ="Choose Independant Variables", 
-                                                                 choices = list( "Distance From Home" = "DistanceFromHome",  "Monthly Income" = "MonthlyIncome", "Number of Companies Worked" =
-                                                                                   "NumCompaniesWorked",  "Training Times Last Year" = "TrainingTimesLastYear", "Years Since Last Promotion" = "YearsSinceLastPromotion", "Years With Current
-                                                                                Manager" = "YearsWithCurrManager", 
-                                                                                 "Department.Sales" = " Department.Sales",
-                                                                                 "Education.College" = "Education.College", "Education.Bachelor" = "Education.Bachelor",
-                                                                                 "Education.Master" = "Education.Master", "Education.Doctor" = "Education.Doctor",
-                                                                                 "EducationField.Marketing" =
-                                                                                   "EducationField.Marketing",
-                                                                                 "EducationField.Other" = "EducationField.Other", "Gender.Male" = "Gender.Male", "MaritalStatus.Married" =
-                                                                                   "MaritalStatus.Married", "MaritalStatus.Single" = "MaritalStatus.Single"), selected = list( "Distance From Home" = "DistanceFromHome",
-                                                                                                                                                                               "Monthly Income" = "MonthlyIncome", "Number of Companies
-                                                                                                                   Worked" = "NumCompaniesWorked", "Percent Salary Hike" = "PercentSalaryHike",  "Total Working
-                                                                                                                   Years" = "TotalWorkingYears", "Training Times Last Year" = "TrainingTimesLastYear",  "Years At Company" = "YearsAtCompany", "Years In Current Role" =
-                                                                                                                                                                                 "YearsInCurrentRole", "Years Since Last Promotion" = "YearsSinceLastPromotion", "Years With Current
-                                                                                                                   Manager" = "YearsWithCurrManager",
-                                                                                                                                                                               "Department.Sales" = " Department.Sales",
-                                                                                                                                                                               "Education.College" = "Education.College", "Education.Bachelor" = "Education.Bachelor",
-                                                                                                                                                                               "Education.Master" = "Education.Master", "Education.Doctor" = "Education.Doctor",
-                                                                                                                                                                               "EducationField.Marketing" =
-                                                                                                                                                                                 "EducationField.Marketing", "EducationField.Medical" = "EducationField.Medical",
-                                                                                                                                                                               "EducationField.Other" = "EducationField.Other", "Gender.Male" = "Gender.Male", "MaritalStatus.Married" =
-                                                                                                                                                                                 "MaritalStatus.Married", "MaritalStatus.Single" = "MaritalStatus.Single")), width = 4)),
-            conditionalPanel(condition = "input.choice_model == 'LDA'",
-                             box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
-                                 verbatimTextOutput("ModSummaryLDA"), width = 12)),
-            conditionalPanel(condition = "input.choice_model == 'Naive Bayes'",
-                             box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
-                                 verbatimTextOutput("ModSummaryNB"), width = 12)),
-            conditionalPanel(condition = "input.choice_model == 'KNN'",
-                             box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
-                                 verbatimTextOutput("ModSummaryKNN"), width = 12)),
-            conditionalPanel(condition = "input.choice_model == 'Support Vector Machine'",
-                             box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
-                                 verbatimTextOutput("ModSummarySVM"), width = 12)),
-            conditionalPanel(condition = "input.choice_model == 'Decision Tree'",
-                             box(title = "Decision Tree Chart", solidHeader = TRUE, background = "aqua", status = "primary",
-                                 plotOutput("DTREE"), width = 12)),
+                           
+                         )
+                  )
+                )
+              )
+      ),
+      tabItem(tabName = "ml",
+              fluidPage(
+                sliderInput("trainsplit", "Portion training:",
+                            min = 0.05, max = 0.95,
+                            value = 0.7, step = 0.05
+                ),
+                h3("Choisir les parametres d'entrainement"),
+                radioButtons("radio",
+                             label="Selectionnez",
+                             choices = list("Over Sampling " = 1, "Under Sampling " = 2,"Sans Sampling" = 3),
+                             selected = 1,
+                             inline = T,
+                             width = "100%"),
+                tabPanel("Classification",
+                         tabsetPanel(
+                           tabPanel("Random Forest", h1("Random Forest"),fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_RF"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_RF"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_RF"))),plotOutput("Classification_rf")),
+                           tabPanel("Logistic Regression", h1("Logistic Regression"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_LR"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_LR"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_LR"))),plotOutput("classification_lr")),
+                           tabPanel("Decision Tree", h1("Decision Tree"),fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_DT"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_DT"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_DT"))),fluidRow(column(4, h4("Arbre de dÃ©cision :")), column(12, plotOutput("DT_tree"))), h4("Courbe PR:"),plotOutput("Classification_DT")),
+                           tabPanel("SVM", h1("SVM"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_SVM"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_SVM"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_SVM"))),plotOutput("classification_svm")),
+                           tabPanel("KNN", h1("KNN"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_KNN"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_KNN"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_KNN"))),plotOutput("classification_knn")),
+                           tabPanel("LDA", h1("LDA"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_LDA"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_LDA"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_LDA"))),plotOutput("classification_lda")),
+                           tabPanel("Naive Bayes", h1("NB"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_NB"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_NB"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_NB"))),plotOutput("classification_nb"))
+                           
+                           
+                         )
+                         
+                ))     
+              
+      ),
+      
+      tabItem(
+        tabName = "classification",
+        fluidRow(
+          box(background = "black", textOutput(("ModName")))),
+        fluidRow(
+          
+          selectInput(inputId = "choice_model", label ="Choose a Model", choices = list("Logistic Regression",
+                                                                                        "LDA", "Naive Bayes", "KNN", "Support Vector Machine", "Decision Tree"), selected = "Logistic
+                      Regression", multiple = FALSE),
+          
+          conditionalPanel(condition = "input.choice_model == 'Support Vector Machine'",
+                           selectInput(inputId = "choice_type", label ="Choose a Machine Type", choices = list("C-classification",
+                                                                                                               "nu-classification"), selected = "C-classification", multiple = FALSE),
+                           selectInput(inputId = "choice_kernel", label ="Choose a Kernel Type", choices = list("linear",
+                                                                                                                "polynomial", "radial", "sigmoid"), selected = "polynomial", multiple = FALSE)),
+          conditionalPanel(condition = "input.choice_model == 'Decision Tree'",
+                           sliderInput(inputId = "choice_threshold", label ="Choose Test Statistic Threshold", min = 0.90, max =
+                                         0.99, value = 0.95, step = 0.01),
+                           sliderInput(inputId = "choice_depth", label ="Choose Max Tree Depth", min = 1, max = 30, value = 6,
+                                       step = 1),
+                           sliderInput(inputId = "choice_split", label ="Choose Min Threshold for Splitting", min = 10, max = 200,
+                                       value = 20, step = 1)),
+          
+          
+          conditionalPanel(condition = "input.choice_model == 'Logistic Regression'",
+                           box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
+                               verbatimTextOutput("ModSummaryLR"), width = 8),
+                           box(title = "Feature Selection Parameters", solidHeader = TRUE, background = "olive", status =
+                                 "primary", checkboxGroupInput(inputId = "choice_indvar", label ="Choose Independant Variables", 
+                                                               choices = list( "Distance From Home" = "DistanceFromHome",  "Monthly Income" = "MonthlyIncome", "Number of Companies Worked" =
+                                                                                 "NumCompaniesWorked",  "Training Times Last Year" = "TrainingTimesLastYear", "Years Since Last Promotion" = "YearsSinceLastPromotion", "Years With Current
+                                                                               Manager" = "YearsWithCurrManager", 
+                                                                               "Department.Sales" = " Department.Sales",
+                                                                               "Education.College" = "Education.College", "Education.Bachelor" = "Education.Bachelor",
+                                                                               "Education.Master" = "Education.Master", "Education.Doctor" = "Education.Doctor",
+                                                                               "EducationField.Marketing" =
+                                                                                 "EducationField.Marketing",
+                                                                               "EducationField.Other" = "EducationField.Other", "Gender.Male" = "Gender.Male", "MaritalStatus.Married" =
+                                                                                 "MaritalStatus.Married", "MaritalStatus.Single" = "MaritalStatus.Single"), selected = list( "Distance From Home" = "DistanceFromHome",
+                                                                                                                                                                             "Monthly Income" = "MonthlyIncome", "Number of Companies
+                                                                                                                                                                             Worked" = "NumCompaniesWorked", "Percent Salary Hike" = "PercentSalaryHike",  "Total Working
+                                                                                                                                                                             Years" = "TotalWorkingYears", "Training Times Last Year" = "TrainingTimesLastYear",  "Years At Company" = "YearsAtCompany", "Years In Current Role" =
+                                                                                                                                                                               "YearsInCurrentRole", "Years Since Last Promotion" = "YearsSinceLastPromotion", "Years With Current
+                                                                                                                                                                             Manager" = "YearsWithCurrManager",
+                                                                                                                                                                             "Department.Sales" = " Department.Sales",
+                                                                                                                                                                             "Education.College" = "Education.College", "Education.Bachelor" = "Education.Bachelor",
+                                                                                                                                                                             "Education.Master" = "Education.Master", "Education.Doctor" = "Education.Doctor",
+                                                                                                                                                                             "EducationField.Marketing" =
+                                                                                                                                                                               "EducationField.Marketing", "EducationField.Medical" = "EducationField.Medical",
+                                                                                                                                                                             "EducationField.Other" = "EducationField.Other", "Gender.Male" = "Gender.Male", "MaritalStatus.Married" =
+                                                                                                                                                                               "MaritalStatus.Married", "MaritalStatus.Single" = "MaritalStatus.Single")), width = 4)),
+          conditionalPanel(condition = "input.choice_model == 'LDA'",
+                           box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
+                               verbatimTextOutput("ModSummaryLDA"), width = 12)),
+          conditionalPanel(condition = "input.choice_model == 'Naive Bayes'",
+                           box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
+                               verbatimTextOutput("ModSummaryNB"), width = 12)),
+          conditionalPanel(condition = "input.choice_model == 'KNN'",
+                           box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
+                               verbatimTextOutput("ModSummaryKNN"), width = 12)),
+          conditionalPanel(condition = "input.choice_model == 'Support Vector Machine'",
+                           box(title = "Summary Output", solidHeader = TRUE, background = "aqua", status = "primary",
+                               verbatimTextOutput("ModSummarySVM"), width = 12)),
+          conditionalPanel(condition = "input.choice_model == 'Decision Tree'",
+                           box(title = "Decision Tree Chart", solidHeader = TRUE, background = "aqua", status = "primary",
+                               plotOutput("DTREE"), width = 12))
           ))
-        
-        
-        
-      )
-    )
+      
+      
+      
+              )
+                                  )
     
     
-  ),
+    ),
   server = function(input, output,session) {
     options(shiny.maxRequestSize=150*1024^2)
     initial_data<-reactiveVal(NULL)
@@ -2104,7 +2178,7 @@ Regression", multiple = FALSE),
               plot(df[,strCol], type='l', pch=16, col='green', xlab='nombre de lignes', ylab='valeurs')
               
               legend(x = "topright",          # Position
-                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),""),  # Legend texts
+                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),"") # Legend texts
                      
               ) 
               
@@ -2221,7 +2295,7 @@ Regression", multiple = FALSE),
               plot(df[,strCol], type='l', pch=16, col='green', xlab='nombre de lignes', ylab='valeurs')
               
               legend(x = "topright",          # Position
-                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),""),  # Legend texts
+                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),"") # Legend texts
                      
               ) 
               
@@ -3405,6 +3479,93 @@ Regression", multiple = FALSE),
       
     })
     
+    
+    
+    # Statistical Tests
+    
+    observeEvent(input$file1, {
+      updateSelectInput(session, inputId = "cols7", choices = colnames(data()))
+      updateSelectInput(session, inputId = "cols8", choices = colnames(data()))
+    }
+    )
+    
+    output$qqp <- renderPlot({
+      df <- data()
+      qqnorm(df[, input$cols7]);qqline(df[, input$cols7])
+    })
+    
+    adt <- reactive({
+      df <- data()
+      var <- df[, input$cols7]
+      ad <- ad.test(var)
+      return(ad)
+    })
+    
+    sht <- reactive({
+      df <- data()
+      var <- df[, input$cols7]
+      sh <- shapiro.test(var)
+      return(sh)
+    })
+    
+    kst <- reactive({
+      df <- data()
+      var1 <- df[, input$cols7]
+      var2 <- df[, input$cols8]
+      ks <- ks.test(var1, var2)
+      return(ks)
+    })
+    
+    mvst <- reactive({
+      df <- data()
+      var1 <- df[, input$cols7]
+      var2 <- df[, input$cols8]
+      return(mshapiro.test(t(as.data.frame(var1, var2))))
+    })
+    
+    output$normtest <- renderPrint({
+      
+      if(input$normaltest == "A-D-Test"){
+        print(adt())
+      } else if(input$normaltest == "Shapiro"){
+        print(sht())
+      } else if(input$normaltest == "KS-Test"){
+        print(kst())
+      } else if(input$normaltest == "MV-Shapiro"){
+        print(mvst())
+      }
+      
+    }
+    
+    )
+    # correlation & regression 
+    
+    observeEvent(input$file1, {
+      updateSelectInput(session, inputId = "cols9", choices = colnames(data()))
+      updateSelectInput(session, inputId = "cols10", choices = colnames(data()))
+    }
+    )
+    
+    cortest <- reactive({
+      var1 <- data()[,input$cols9]
+      var2 <- data()[,input$cols10]
+      
+      if (input$cormethod == "Covariance"){
+        return(cov(var1, var2))
+      } else if (input$cormethod == "KarlPearson"){
+        return(cor.test(var1, var2, method = "pearson"))
+      } else if(input$cormethod == "Spearman"){
+        return(cor.test(var1, var2, method="spearman"))
+      } else {
+        return(cor.test(var1, var2, method="kendall"))
+      }
+    }
+    )
+    
+    output$cor_t <- renderPrint({
+      
+      cortest()
+    })
     
     
     
