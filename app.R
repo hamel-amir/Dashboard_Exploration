@@ -11,21 +11,16 @@ library(DT)
 library(plyr)
 library(plotly)
 library(reader)
-library("class")
 library("plotrix")
 library(CatEncoders)
 library(MLmetrics)
 library(ROSE)
-library(smotefamily)
+library(DMwR)
 library(ggplot2)
 library(GGally)
 library(readxl)
-library(heatmaply)
-library(zoo)
 library(tidyr)
 library(dplyr)
-library(mice)
-library(caret)
 library("partykit")
 library(nortest)
 library(mvnormtest)
@@ -33,7 +28,6 @@ library(MASS)
 library(shinyLP)
 library(class)
 library(gmodels)
-library(caret)
 library(rattle)
 library(ranger)
 library(klaR)
@@ -58,55 +52,21 @@ source('./Server moduls/Missing.R')
 source('./Server moduls/Modele.R')
 source('./Server moduls/ROS.R')
 source('./Server moduls/RUS.R')
-
-######## add ######
-library(shiny)
-library(Hmisc)
-library(UsingR)
-library(reshape2)
-library(ggpubr)
 library(ROCR)
-library("class")
-library("plotrix")
 library(CatEncoders)
-library(MLmetrics)
-library(nnet)
-library(e1071)
-
-library(datasets)
 library(boot)
 library(DAAG)
 library(class)
 library(plotrix)
 library(KNNShiny)
 library(tidyverse)
-library(ROCR)
 library(pROC)
 library(caTools)
 library(randomForest)
-library(MLmetrics)
-library(corrplot)
 library(PRROC)
 library(rpart)
-library(rpart.plot)
-
-
-
-library(shiny)
-library(Hmisc)
-library(UsingR)
-library(reshape2)
-library(ggpubr)
-library("class")
-library("plotrix")
-library(CatEncoders)
-library(MLmetrics)
-library(sjmisc)
-library(sjlabelled)
 library(shinycssloaders)
 library(NbClust) 
-#library(xlsx) 
-library(shiny)
 library(shinydashboardPlus)
 library(dashboardthemes)
 library(VIM)
@@ -114,7 +74,6 @@ library(epitools)
 library(survival)
 library(naniar)
 library(data.table)
-library(dlookr)
 library(markdown)
 library(ggfortify)
 library(survminer)
@@ -138,151 +97,55 @@ library(tidyverse)
 library(ggeffects)
 library(effects)
 library(pscl)
-library(MASS)
 library(shinyalert)
-library(see)
 library(shinycustomloader)
 library(periscope)
 library(viridis)
-library(corrr)
 library(sjPlot)
 library(sjmisc)
 library(sjlabelled)
-library(parameters)
-library(ggforce)
-library(DataExplorer)
 library(knitr)
 library(fresh)
-library(vov)
-
-
-
-library(shiny)
-library(Hmisc)
-library(UsingR)
-library(reshape2)
-library(ggpubr)
-library(shinydashboard)
 library(DT)
 library(plyr)
 library(plotly)
-library(reader)
-library(ROCR)
 #library("ElemStatLearn")
-library("class")
-library("plotrix")
-library(CatEncoders)
-library(MLmetrics)
-library(ROSE)
-library(smotefamily)
-library(ggplot2)
-library(GGally)
 library(readxl)
-library(heatmaply)
 library(zoo)
 library(tidyr)
 library(dplyr)
 library(mice)
 library(caret)
-library(nnet)
-library(e1071)
-
 library(datasets)
-library(boot)
-library(DAAG)
-library(class)
 library(plotrix)
 library(KNNShiny)
-library(DT)
 library(tidyverse)
 library(ROCR)
 library(pROC)
-library(caret)
 library(caTools)
 library(randomForest)
-library(MLmetrics)
 library(plyr)
 library(corrplot)
 library(PRROC)
-library(rpart)
 library(rpart.plot)
-
-
-
-library(shiny)
-library(Hmisc)
-library(UsingR)
-library(reshape2)
-library(ggpubr)
-library(shinydashboard)
-library(DT)
-library(plyr)
-library(plotly)
-library(reader)
 #library("ElemStatLearn")
-library("class")
-library("plotrix")
-library(CatEncoders)
-library(MLmetrics)
-library(ROSE)
-library(smotefamily)
-library(ggplot2)
-library(GGally)
-library(readxl)
-library(tidyr)
-library(sjmisc)
-library(sjlabelled)
-library(shinycssloaders)
-library(caret)
-library(tidyr)
-library(NbClust) 
-
-library(shiny)
-library(shinydashboard)
-library(shinydashboardPlus)
-library(dashboardthemes)
-library(mice)
-library(DT)
-library(VIM)
-library(readxl)
-library(epitools)
-library(survival)
-library(naniar)
 library(dplyr)
-library(ggplot2)
-library(data.table)
-library(dlookr)
-library(markdown)
-library(plotly)
 library(ggfortify)
 library(survminer)
 library(psych)
-library(GGally)
 library(factoextra)
 library(FactoMineR)
-library(dlookr)
 library(summarytools)
-library(purrr)
-library(openxlsx)
+
 library(BSDA)
 library(hrbrthemes)
 library(performance)
-library(gt)
 library(broom)
-library(gtsummary)
-library(fontawesome)
-library(aod)
-library(DescTools)
-library(tidyverse)
-library(ggeffects)
-library(effects)
 library(pscl)
-library(MASS)
 library(shinyalert)
 library(see)
 library(shinycustomloader)
 library(periscope)
-library(viridis)
 library(heatmaply)
 library(corrr)
 library(sjPlot)
@@ -291,11 +154,9 @@ library(sjlabelled)
 library(parameters)
 library(ggforce)
 library(DataExplorer)
-library(knitr)
-library(fresh)
 library(vov)
 library(Metrics)
-
+options(warn=-1)
 shinyApp(
   ui = dashboardPage(
     dashboardHeader(),
@@ -1220,7 +1081,7 @@ shinyApp(
       #print("HERE !!!!!")
       #print(get.ext(infile$datapath))
       if(get.ext(infile$datapath)=="xls"){
-        print("I am here xls")
+       
         d=read_xls(infile$datapath,header=input$Header, sep =input$sep)
         #print(tmpData)
         data(d)
@@ -2755,7 +2616,7 @@ shinyApp(
       
       empattr$Over18 = factor(empattr$Over18)
       
-      empattr = empattr[,which(!(names(empattr) %in% c("EmployeeID", "EmployeeCount", "StandardHours", "Over18","Age")))]
+      empattr = empattr[,which(!(names(empattr) %in% c("EmployeeID", "EmployeeCount", "StandardHours", "Over18")))]
       empattr = na.omit(empattr)
       
       empattr
@@ -2774,6 +2635,7 @@ shinyApp(
       
       
     })
+   
     
     
     #The following lines of code generate a texbox for model name
@@ -2791,8 +2653,11 @@ shinyApp(
     testset = reactive({HR_trandata [-indexes(),]})
     
     balanced_trainset = reactive({
-      #SMOTE(Attrition~., data = one_hot(), perc.over=100, perc.under = 80)
-      one_hot()
+      
+      dat<-one_hot()
+      res<-SMOTE(Attrition~., data = dat, perc.over=600)
+      res
+      #one_hot()
       
       
     })
@@ -2825,7 +2690,7 @@ shinyApp(
               balanced_trainset(), type= svm_type(), kernel= svm_kernel())
       } else if(input$choice_model == "Decision Tree"){
         ctree(as.formula(paste("Attrition~ ", paste0(input$choice_indvar, collapse = "+"))), data =
-                balanced_trainset(), control = ctree_control(mincriterion = input$choice_threshold, maxdepth =
+                one_hot(), control = ctree_control(mincriterion = input$choice_threshold, maxdepth =
                                                                input$choice_depth, minsplit = input$choice_split))
       } else if(input$choice_model == "LDA"){
         train(as.formula(paste("Attrition~ ", paste0(input$choice_indvar, collapse = "+"))), method = "lda",
@@ -2874,11 +2739,12 @@ shinyApp(
     
     train_Lr <- reactive({
       set.seed(3000)
-      dataset = one_hot()
-      dataset=na.omit(dataset)
+      dataset =balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
+      
+      
       
       if (input$radio == 2){
         downSample(train, train$Attrition)
@@ -2889,14 +2755,14 @@ shinyApp(
         
       }
       
-      attLog=glm(Attrition~.,data=train,family = binomial)
+      attLog=glm(Attrition~.,data=train,family = binomial())
+      
       
     })
     
     output$Acc_LR <- renderText({
       set.seed(3000)
       dataset = one_hot()
-      dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -2908,7 +2774,7 @@ shinyApp(
     })
     output$Rec_LR <- renderText({
       set.seed(3000)
-      dataset = one_hot()
+      dataset =one_hot()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -2921,7 +2787,7 @@ shinyApp(
     })
     output$f_score_LR <- renderText({
       set.seed(3000)
-      dataset = one_hot()
+      dataset =one_hot()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -2935,7 +2801,6 @@ shinyApp(
     output$classification_lr <- renderPlot({
       set.seed(3000)
       dataset = one_hot()
-      dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3037,7 +2902,7 @@ shinyApp(
     
     train_SVM <- reactive({
       set.seed(3000)
-      dataset = one_hot()
+      dataset =one_hot()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3333,7 +3198,7 @@ shinyApp(
     
     train_DT<- reactive({
       set.seed(3000)
-      dataset = one_hot()
+      dataset = balanced_trainset()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -3349,7 +3214,7 @@ shinyApp(
       decisionTreeModel= rpart(Attrition~.,data=train,method="class")
     })  
     output$Acc_DT <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3361,7 +3226,7 @@ shinyApp(
       
     })
     output$Rec_DT <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3373,7 +3238,7 @@ shinyApp(
       
     })
     output$f_score_DT <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3383,7 +3248,7 @@ shinyApp(
       F1_Score(as.numeric(as.factor(test$Attrition)), as.numeric(predDT))*100
     })
     output$Classification_DT <- renderPlot({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
