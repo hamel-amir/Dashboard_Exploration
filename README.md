@@ -1,15 +1,15 @@
 # Dashboard_Exploration
 Application web développé en langage R et de la librairie shiny, qui permet :
-  Choix de données (déjà présentes ou chargement de fichiers textes)
-  Réalisation des calculs statistiques simples
-  Création des graphiques usuels
+      Choix de données (déjà présentes ou chargement de fichiers textes)
+      Réalisation des calculs statistiques simples
+      Création des graphiques usuels
 
 Les onglets
 
-Données : a importer
-Univarié : description d'une variable
-Bivariée : description du lien entre deux variables
-Informations de base (nombre de valeurs, nombre de valeurs manquantes, % de valeurs manquantes)
+      Données : a importer
+      Univarié : description d'une variable
+      Bivariée : description du lien entre deux variables
+      Informations de base (nombre de valeurs, nombre de valeurs manquantes, % de valeurs manquantes)
 Analyse Univariée :
     Quantitative:
         Numérique : moyenne, écart-type, variance, minimum, Q1, médiane, Q3, maximum
