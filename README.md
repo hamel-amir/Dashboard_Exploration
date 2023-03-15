@@ -1,8 +1,8 @@
 # Dashboard_Exploration
 Application web développé en langage R et de la librairie shiny, qui permet :
-      Choix de données (déjà présentes ou chargement de fichiers textes)
-      Réalisation des calculs statistiques simples
-      Création des graphiques usuels
+            Choix de données (déjà présentes ou chargement de fichiers textes)
+            Réalisation des calculs statistiques simples
+            Création des graphiques usuels
 
 Les onglets
 
