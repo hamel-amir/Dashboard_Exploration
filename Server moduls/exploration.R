@@ -45,7 +45,7 @@ exploration_server <- function(input,output,df) {
      Vm<-colnames(df)[colSums(is.na(df) > 0)]
      if(length(Vm)>0){
        output$Theatmap<-renderText({
-         " Ya des valeurs quantitatives manquantes, il faut dabord les imputer"
+         " il existe des valeurs quantitatives manquantes, il faut dabord les imputer"
        })
      }
      if(length(Vm)==0){

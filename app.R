@@ -189,11 +189,11 @@ shinyApp(
         menuItem("Accueil", tabName = "accueill", icon = icon("home")),
         menuItem("Dataset", tabName = "Dataset", icon = icon("table")),
         menuItem("Prétraitement des données", tabName = "Pd", icon = icon("table"),
-                 menuSubItem("Imputation des valeurs manquantes", tabName = "imp", icon=icon("dice-one")),
-                 menuSubItem("Traitement des outliers", tabName = "out", icon=icon("dice-one")),
+                 menuSubItem("valeurs manquantes", tabName = "imp", icon=icon("dice-one")),
+                 menuSubItem("Valeurs aberrantes", tabName = "out", icon=icon("dice-one")),
                  menuSubItem("Normalisation", tabName = "nm", icon=icon("dice-one")),
                  menuSubItem("Dummification", tabName = "dm", icon=icon("dice-one")),
-                 menuSubItem("Rééquilibrage des classes", tabName = "rb", icon=icon("dice-one"))
+                 menuSubItem("déséquilibre des classes", tabName = "rb", icon=icon("dice-one"))
         ),
         menuItem("Exploration de données", tabName = "exp", icon = icon("table"),
                  menuSubItem("Fouille de données", tabName = "f", icon = icon("table")),
@@ -219,8 +219,8 @@ shinyApp(
         ),
         
         menuItem("Modeles de classification", tabName="models", icon=icon("chart-line"),
-                 menuSubItem("Regression Linear", tabName = "Rg", icon=icon("dice-one")),
-                 menuSubItem("Reduction de dimension", tabName = "Rd", icon=icon("dice-one"))
+                 menuSubItem("Regression Linear", tabName = "Rg", icon=icon("dice-one"))
+                 #menuSubItem("Reduction de dimension", tabName = "Rd", icon=icon("dice-one"))
                  
         ),
         menuItem("Maching Learning", tabName="ml", icon=icon("chart-line")),
@@ -303,7 +303,7 @@ shinyApp(
                            width = 12,
                            tabPanel("Variable Quantitative",
                                     uiOutput('quantlistM'),
-                                    radioButtons("imputation", "MÃ©thode d'imputation",
+                                    radioButtons("imputation", "Méthode d'imputation",
                                                  c(
                                                    "Imputation par la moyenne" = "Im",
                                                    "Imputation par la mediane" = "Id",
@@ -345,7 +345,7 @@ shinyApp(
                                       ),
                            tabPanel("Variable Qualitative",
                                     uiOutput('qualistM'),
-                                    radioButtons("imputationQ", "MÃ©thode d'imputation",
+                                    radioButtons("imputationQ", "Méthode d'imputation",
                                                  c("Imputation par le mode" = "mode",
                                                    "Suppression de la colonne"="sup",
                                                    "Visulalisation des valeurs manquantes"="vslQ"
@@ -396,10 +396,10 @@ shinyApp(
                          tabPanel("Traitement des outliers",
                                   uiOutput('OutList'),
                                   textOutput("outlier"),
-                                  radioButtons("Out", "Vous voulez supprimer la valeur ?",
+                                  radioButtons("Out", "Vous voulez supprimer les outliers ?",
                                                c("Non" = "Non",
                                                  "Oui" = "Oui",
-                                                 "Afficher la valeur"="Af"
+                                                 "Affichage des outliers"="Af"
                                                  
                                                )),
                                   #actionButton("deleteRows", "spl"),
@@ -419,10 +419,10 @@ shinyApp(
                        tabBox(width = 12,
                               tabPanel("Normalisation",
                                        uiOutput('NList'),
-                                       radioButtons("normalisation", "MÃ©thodes de normalisation",
+                                       radioButtons("normalisation", "Méthodes de normalisation",
                                                     c("Normalisation Min-Max" = "Nm",
                                                       "Normalisation du score z"="Nz",
-                                                      "Visualisation des donnÃ©es"="Vsd"
+                                                      "Visualisation des données"="Vsd"
                                                       
                                                       
                                                       
@@ -463,10 +463,10 @@ shinyApp(
               fluidPage(
                 column(12,
                        tabBox(width = 12,
-                              tabPanel("dimmufication",
+                              tabPanel("Dummification",
                                        uiOutput('dmList'),
                                        
-                                       radioButtons("dm", "Vous voulez appliquer la dummification ?",
+                                       radioButtons("dm", "Voulez vous appliquer la dummification ?",
                                                     c("Non" = "Non",
                                                       "Oui" = "Oui"
                                                       
@@ -503,10 +503,10 @@ shinyApp(
                 column(
                   12,
                   tabBox(width = 12,
-                         tabPanel("rÃ©equilibrage de classes",
+                         tabPanel("Rééquilibrage de classes",
                                   uiOutput('reList'),
                                   
-                                  radioButtons("re", "choisissez la mÃ©thode de rÃ©echantillonnage ?",
+                                  radioButtons("re", "la méthode de réechantillonnage",
                                                c("visualisez la distribition de la classe"="Vc",
                                                  "over-sampling" = "Over",
                                                  "under-sampling" = "Under"
@@ -524,6 +524,7 @@ shinyApp(
                                     condition = "input.re == 'Over'",
                                     textOutput("resultat_Over"),
                                     textOutput("resultat_Over2"),
+                                    plotOutput("Vc_Over"),
                                     tags$head(tags$style("#resultat_Over{color:  green;
                                                          font-size: 20px;
                                                          font-style: italic;
@@ -540,6 +541,7 @@ shinyApp(
                                     condition = "input.re == 'Under'",
                                     textOutput("resultat_Under"),
                                     textOutput("resultat_Under2"),
+                                    plotOutput("Vc_Under"),
                                     tags$head(tags$style("#resultat_Under{color:  green;
                                                          font-size: 20px;
                                                          font-style: italic;
@@ -604,7 +606,7 @@ shinyApp(
                                                   }"
                                ) )
                              ),
-                    tabPanel("MAJ les valeurs d'un attribut",
+                    tabPanel("Modifier les valeurs d'un attribut",
                              uiOutput('attList'),
                              uiOutput('valList'),
                              textInput("Id2", "saisir la nouvelle valeur"),
@@ -704,7 +706,7 @@ shinyApp(
                     column(
                       width = 12,
                       box(
-                        title = "Diagramme en bÃ¢tons des effectifs", status = "primary", solidHeader = TRUE,
+                        title = "Diagramme en batons des effectifs", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE,
                         plotOutput(outputId = "effectifsDiag")
                       ),
@@ -723,7 +725,7 @@ shinyApp(
                         plotOutput(outputId = "effectifsHist")
                       ),
                       box(
-                        title = "CaractÃ©ristiques de tendance centrale et de dispersion", status = "info", solidHeader = TRUE,
+                        title = "Caractéristiques de tendance centrale et de dispersion", status = "info", solidHeader = TRUE,
                         collapsible = TRUE,
                         tableOutput(outputId = "centreDisp"))
                     ),
@@ -770,21 +772,21 @@ shinyApp(
                       title = "",
                       # The id lets us use input$tabset1 on the server to find the current tab
                       id = "tabset1", 
-                      tabPanel("CaractÃ©ristiques", value = "caractÃ©ristiques",
+                      tabPanel("Caractéristiques", value = "caractéristiques",
                                tableOutput("caract")),
-                      tabPanel("Nuage de point avec la regression linÃ©aire", value = "caractÃ©ristiques",
+                      tabPanel("Nuage de point avec la regression linéaire", value = "caractéristiques",
                                plotOutput("nuagePoints"),
                                
                                textOutput("correlation")
                                
                                
                       ),
-                      tabPanel("Nuage de points et Histogrammes", value = "caractÃ©ristiques",
+                      tabPanel("Nuage de points et Histogrammes", value = "caractéristiques",
                                plotOutput("nuagePointshist")
                                
                                
                       ),
-                      tabPanel("Histogrammes dos Ã  dos", value = "caractÃ©ristiques",
+                      tabPanel("Histogrammes dos à dos", value = "caractéristiques",
                                plotOutput("histbackback")
                                
                                
@@ -954,7 +956,7 @@ shinyApp(
                          tabsetPanel(
                            tabPanel("Random Forest", h1("Random Forest"),fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_RF"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_RF"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_RF"))),plotOutput("Classification_rf")),
                            tabPanel("Logistic Regression", h1("Logistic Regression"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_LR"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_LR"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_LR"))),plotOutput("classification_lr")),
-                           tabPanel("Decision Tree", h1("Decision Tree"),fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_DT"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_DT"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_DT"))),fluidRow(column(4, h4("Arbre de dÃ©cision :")), column(12, plotOutput("DT_tree"))), h4("Courbe PR:"),plotOutput("Classification_DT")),
+                           tabPanel("Decision Tree", h1("Decision Tree"),fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_DT"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_DT"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_DT"))),fluidRow(column(4, h4("Arbre de décision :")), column(12, plotOutput("DT_tree"))), h4("Courbe PR:"),plotOutput("Classification_DT")),
                            tabPanel("SVM", h1("SVM"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_SVM"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_SVM"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_SVM"))),plotOutput("classification_svm")),
                            tabPanel("KNN", h1("KNN"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_KNN"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_KNN"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_KNN"))),plotOutput("classification_knn")),
                            tabPanel("LDA", h1("LDA"), fluidRow(column(2, h4("Precison: ")), column(2, textOutput("Acc_LDA"))), fluidRow(column(2, h4("Recall: ")), column(2, textOutput("Rec_LDA"))),fluidRow(column(2, h4("F1_score:")), column(2, textOutput("f_score_LDA"))),plotOutput("classification_lda")),
@@ -1599,7 +1601,7 @@ shinyApp(
         Qnt_Qlt_server(input,output, data())
         Qlt_Qlt_server(input,output, data())
         Modele_server(input, output, data())
-        output$resultat_sup <-renderText( print("la colonne a bien Ã©tÃ© supprimÃ©e"))
+        output$resultat_sup <-renderText( print("la colonne a bien été supprimée"))
         
       }
       if(input$imputationQ=="mode"){
@@ -1731,7 +1733,7 @@ shinyApp(
     # liste de variables quantitative contennat les outliers
     output$OutList = renderUI({
       l2=Outliers()
-      selectInput('OutList', 'Variables contenant des outlier',l2)
+      selectInput('OutList', 'Variables contenant des outliers',l2)
     })
     
     
@@ -2039,7 +2041,7 @@ shinyApp(
               plot(df[,strCol], type='l', pch=16, col='green', xlab='nombre de lignes', ylab='valeurs')
               
               legend(x = "topright",          # Position
-                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),"") # Legend texts
+                     legend = c(paste("les données de la variable ",strCol,""),"") # Legend texts
                      
               ) 
               
@@ -2091,7 +2093,7 @@ shinyApp(
               plot(df[,strCol], type='l', pch=16, col='green', xlab='nombre de lignes', ylab='valeurs')
               
               legend(x = "topright",          # Position
-                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),"") # Legend texts
+                     legend = c(paste("les données de la variable ",strCol,""),"") # Legend texts
                      
               ) 
               
@@ -2156,7 +2158,7 @@ shinyApp(
               plot(df[,strCol], type='l', pch=16, col='green', xlab='nombre de lignes', ylab='valeurs')
               
               legend(x = "topright",          # Position
-                     legend = c(paste("les donnÃ©es de la variable ",strCol,""),"") # Legend texts
+                     legend = c(paste("les données de la variable ",strCol,""),"") # Legend texts
                      
               ) 
               
@@ -2226,7 +2228,7 @@ shinyApp(
               Qnt_Qlt_server(input,output, data())
               Qlt_Qlt_server(input,output, data())
               output$resultat_dm<-renderText(
-                paste0("la variable ",strCol," a bien Ã©tÃ© dummfiÃ©e")
+                paste0("la variable ",strCol," a bien été dummfiée")
                 
               )
               output$resultat_dm2<-renderText(
@@ -2269,7 +2271,7 @@ shinyApp(
             #   geom_text(aes(label = counts), vjust = -0.3) +
             #   theme_pubclean()
             coul <- brewer.pal(5, "Set2")
-            barplot(df2, main = "RÃ©partition de classe",
+            barplot(df2, main = "Répartition de classe",
                     xlab=sym(strCol),
                     ylab="Counts", las = 2,
                     col = coul,
@@ -2325,13 +2327,28 @@ shinyApp(
               Qnt_Qlt_server(input,output, data())
               Qlt_Qlt_server(input,output, data())
               output$resultat_Over<-renderText(
-                paste0("l'over-sampling a bien Ã©tÃ© fait")
+                paste0("l'over-sampling a bien été fait")
                 
               )
               output$resultat_Over2<-renderText(
                 paste0("")
                 
               )
+              
+              output$Vc_Over<-renderPlot({
+                df=data()
+                
+                
+                
+                df2=table(df[,strCol])
+                
+                coul <- brewer.pal(5, "Set2")
+                barplot(df2, main = "Répartition de classe aprés Oversampling ",
+                        xlab=sym(strCol),
+                        ylab="Counts", las = 2,
+                        col = coul,
+                        names.arg = substr(names(df2), 1, 9))
+              })
               
             }
           }
@@ -2350,7 +2367,7 @@ shinyApp(
           df=data()
           if(length(table(df[,strCol]))!=2){
             output$resultat_Under2<-renderText(
-              paste0("l'attribut n'est pas binaire, veuillez choisir la classe(target)")
+              paste0("l'attribut n'est pas binaire, veuillez choisir la classe(target) binaire")
               
             )
             output$resultat_Under<-renderText(
@@ -2388,13 +2405,28 @@ shinyApp(
               Qnt_Qlt_server(input,output, data())
               Qlt_Qlt_server(input,output, data())
               output$resultat_Under<-renderText(
-                paste0("l'under-sampling a bien Ã©tÃ© fait")
+                paste0("l'under-sampling a bien été fait")
                 
               )
               output$resultat_Under2<-renderText(
                 paste0("")
                 
               )
+              
+              output$Vc_Under<-renderPlot({
+                df=data()
+                
+                
+                
+                df2=table(df[,strCol])
+                
+                coul <- brewer.pal(5, "Set2")
+                barplot(df2, main = "Répartition de classe aprés Undersampling ",
+                        xlab=sym(strCol),
+                        ylab="Counts", las = 2,
+                        col = coul,
+                        names.arg = substr(names(df2), 1, 9))
+              })
               
             }
           }
@@ -2438,7 +2470,7 @@ shinyApp(
             Qnt_Qlt_server(input,output, data())
             Qlt_Qlt_server(input,output, data())
             output$resultat_Both<-renderText(
-              paste0("l'under-sampling a bien Ã©tÃ© fait")
+              paste0("l'under-sampling a bien été fait")
               
             )
             output$resultat_Both2<-renderText(
@@ -2465,7 +2497,7 @@ shinyApp(
     
     ## renommer la colonne ###
     output$renameList<- renderUI({
-      selectInput('renameList', 'Le choix de la classe ',colnames(data()))
+      selectInput('renameList', 'Le choix de la variable ',colnames(data()))
       
     })
     
@@ -2485,7 +2517,7 @@ shinyApp(
         Qnt_Qlt_server(input,output, data())
         Qlt_Qlt_server(input,output, data())
         output$rename<-renderText(
-          "l'attribut a bien Ã©tÃ© renommÃ©"
+          "l'attribut a bien été renommée"
         )
       }
       
@@ -2500,12 +2532,12 @@ shinyApp(
       
     })
     output$typeList<- renderUI({
-      selectInput('type', 'type de la nouvelle valeur',c("Character","Integer","Double"))
+      selectInput('type', 'Type de la nouvelle valeur',c("Character","Integer","Double"))
       
     })
     observeEvent(input$attList,{
       output$valList<- renderUI({
-        selectInput('valList', 'Le choix de la valeur ',(data()[,input$attList]))
+        selectInput('valList', 'Le choix de sa valeur ',(data()[,input$attList]))
         
       })
       
@@ -2551,7 +2583,7 @@ shinyApp(
           Bivaree_server(input,output, data())
           Qnt_Qlt_server(input,output, data())
           Qlt_Qlt_server(input,output, data())
-          output$MAJtxt<-renderText("la valeur a bien Ã©tÃ© mise a jour")
+          output$MAJtxt<-renderText("la valeur a bien été mise a jour")
           
         }
         
