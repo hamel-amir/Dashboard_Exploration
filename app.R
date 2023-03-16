@@ -2687,7 +2687,7 @@ shinyApp(
     balanced_trainset = reactive({
       
       dat<-one_hot()
-      res<-SMOTE(Attrition~., data = dat, perc.over=600)
+      res<-SMOTE(Attrition~., data = dat, perc.over=100)
       res
       #one_hot()
       
@@ -2716,23 +2716,23 @@ shinyApp(
     trainmodel = reactive({
       if(input$choice_model == "Naive Bayes"){
         naiveBayes(as.formula(paste("Attrition~ ", paste0(input$choice_indvar, collapse = "+"))), data =
-                     balanced_trainset())
+                     one_hot())
       } else if(input$choice_model == "Support Vector Machine"){
         svm(as.formula(paste("Attrition~ ", paste0(input$choice_indvar, collapse = "+"))), data =
-              balanced_trainset(), type= svm_type(), kernel= svm_kernel())
+              one_hot(), type= svm_type(), kernel= svm_kernel())
       } else if(input$choice_model == "Decision Tree"){
         ctree(as.formula(paste("Attrition~ ", paste0(input$choice_indvar, collapse = "+"))), data =
                 one_hot(), control = ctree_control(mincriterion = input$choice_threshold, maxdepth =
                                                                input$choice_depth, minsplit = input$choice_split))
       } else if(input$choice_model == "LDA"){
         train(as.formula(paste("Attrition~ ", paste0(input$choice_indvar, collapse = "+"))), method = "lda",
-              data = balanced_trainset())
+              data = one_hot())
       } else if(input$choice_model == "KNN"){
         train(as.formula(paste("Attrition~ ", paste0(input$choice_indvar, collapse = "+"))), method = "knn",
-              data = balanced_trainset())
+              data = one_hot())
       } else {
         glm(as.formula(paste("Attrition~ ",paste0(input$choice_indvar, collapse = "+"))), data =
-              balanced_trainset(), family = "binomial")
+              one_hot(), family = "binomial")
       }
     })
     
@@ -2800,8 +2800,11 @@ shinyApp(
       test=subset(dataset,split==F)
       attLog=train_Lr()
       predGlm=predict(attLog,type="response",newdata=test)
-      accuracy <- table(test$Attrition,predGlm>.5)
-      sum(diag(accuracy))/sum(accuracy)*100
+      pred <- ifelse(predGlm < 0.5, 0, 1)
+      xtab = table(pred, test$Attrition)
+      precision = xtab[1,1]/sum(xtab[,1])
+      precision*100
+      
       
     })
     output$Rec_LR <- renderText({
@@ -2851,7 +2854,7 @@ shinyApp(
     
     train_KNN <- reactive({
       set.seed(3000)
-      dataset = one_hot()
+      dataset = balanced_trainset()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -2871,22 +2874,22 @@ shinyApp(
     
     output$Acc_KNN <- renderText({
       set.seed(3000)
-      dataset = one_hot()
+      dataset = balanced_trainset()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
       auto_knn=train_KNN()
       predict_autoknn = predict(auto_knn,test)
-      table(test$Attrition,predict_autoknn)
-      accuracy <- table(as.factor(test$Attrition),predict_autoknn)
-      sum(diag(accuracy))/sum(accuracy)*100
+      xtab = table(predict_autoknn, test$Attrition)
+      precision = xtab[1,1]/sum(xtab[,1])
+      precision*100
       
       
     })
     output$Rec_KNN<- renderText({
       set.seed(3000)
-      dataset = one_hot()
+      dataset =balanced_trainset()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -2899,7 +2902,7 @@ shinyApp(
     })
     output$f_score_KNN <- renderText({
       set.seed(3000)
-      dataset = one_hot()
+      dataset =balanced_trainset()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -2914,7 +2917,7 @@ shinyApp(
       
     })
     output$classification_knn <- renderPlot({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -2960,8 +2963,9 @@ shinyApp(
       auto_svm=train_SVM()
       predict_autosvm = predict(auto_svm, test)
       table(test$Attrition,predict_autosvm)
-      accuracy <- table(as.factor(test$Attrition),predict_autosvm)
-      sum(diag(accuracy))/sum(accuracy)*100
+      xtab = table(predict_autosvm, test$Attrition)
+      precision = xtab[1,1]/sum(xtab[,1])
+      precision*100
       
     })
     output$f_score_SVM <- renderText({
@@ -3008,7 +3012,7 @@ shinyApp(
     
     train_LDA <- reactive({
       set.seed(3000)
-      dataset = one_hot()
+      dataset = balanced_trainset()
       dataset=dataset[,-c(19,20)]
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
@@ -3028,20 +3032,20 @@ shinyApp(
     })
     
     output$Acc_LDA <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
       auto_lda=train_LDA()
       predict_autolda =predict(auto_lda, test)
       predicted_autolda = as.factor(predict_autolda)
-      table(test$Attrition,predicted_autolda)
-      accuracy <- table(as.factor(test$Attrition),predicted_autolda)
-      sum(diag(accuracy))/sum(accuracy)*100
+      xtab = table(predict_autolda, test$Attrition)
+      precision = xtab[1,1]/sum(xtab[,1])
+      precision*100
       
     })
     output$f_score_LDA <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3053,7 +3057,7 @@ shinyApp(
       
     })
     output$Rec_LDA <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3067,13 +3071,14 @@ shinyApp(
       
     })
     output$classification_lda <- renderPlot({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
       auto_lda=train_LDA()
       predict_autolda= predict(auto_lda, test)
       scores <- data.frame(predict_autolda,test$Attrition)
+      print(scores)
       pr <- pr.curve(scores.class0=scores[scores$test.Attrition=="Leave",]$predict_autolda,
                      scores.class1=scores[scores$test.Attrition=="No Leave",]$predict_autolda,
                      curve=T)
@@ -3085,7 +3090,7 @@ shinyApp(
     
     train_NB <- reactive({
       set.seed(3000)
-      dataset = one_hot()
+      dataset = balanced_trainset()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -3104,20 +3109,20 @@ shinyApp(
     })
     
     output$Acc_NB <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
       auto_nb=train_NB()
       predict_autonb =predict(auto_nb, test)
       predicted_autonb = as.factor(predict_autonb)
-      table(test$Attrition,predicted_autonb)
-      accuracy <- table(as.factor(test$Attrition),predicted_autonb)
-      sum(diag(accuracy))/sum(accuracy)*100
+      xtab = table(predict_autonb, test$Attrition)
+      precision = xtab[1,1]/sum(xtab[,1])
+      precision*100
       
     })
     output$f_score_NB <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3129,7 +3134,7 @@ shinyApp(
       
     })
     output$Rec_NB <- renderText({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -3141,12 +3146,13 @@ shinyApp(
       
     })
     output$classification_nb <- renderPlot({
-      dataset=one_hot()
+      dataset=balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
       auto_nb=train_NB()
-      predict_autonb= predict(auto_nb, test)
+      predict_autonb= predict(auto_nb, test,type='class')
+      predicted_autonb = as.factor(predict_autonb)
       scores <- data.frame(predict_autonb,test$Attrition)
       pr <- pr.curve(scores.class0=scores[scores$test.Attrition=="Leave",]$predict_autonb,
                      scores.class1=scores[scores$test.Attrition=="No Leave",]$predict_autonb,
@@ -3181,9 +3187,9 @@ shinyApp(
       test=subset(dataset,split==F)
       randomForestModel=train_rf()
       predictRF=predict(randomForestModel,newdata=test)
-      table(test$Attrition,predictRF)
-      accuracy <- table(as.factor(test$Attrition),predictRF)
-      sum(diag(accuracy))/sum(accuracy)*100
+      xtab = table(predictRF, test$Attrition)
+      precision = xtab[1,1]/sum(xtab[,1])
+      precision*100
       
     })
     output$Rec_RF <- renderText({
@@ -3252,9 +3258,9 @@ shinyApp(
       test=subset(dataset,split==F)
       decisionTreeModel=train_DT()
       predDT=predict(decisionTreeModel,newdata = test,type = "class")
-      table(test$Attrition,predDT)
-      accuracy <- table(as.factor(test$Attrition),predDT)
-      sum(diag(accuracy))/sum(accuracy)*100
+      xtab = table(predDT, test$Attrition)
+      precision = xtab[1,1]/sum(xtab[,1])
+      precision*100
       
     })
     output$Rec_DT <- renderText({
