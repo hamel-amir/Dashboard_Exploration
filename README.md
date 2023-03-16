@@ -1,15 +1,16 @@
 # Dashboard_Exploration
-Application web intéractive développé en langage R et de la librairie shiny, qui permet le choix de données (chargement des fichiers de données),l'exploration et la visualisations des données avec des graphiques  ,réalisation des calculs statistiques ainsi qu'une partie d'apprentissage automatique .Et donc cet outil se base sur deux axes :Analyse descriptives (Univariée et Bivariée) et explicatives des données (des modéles de machine Learning)
+Application web intéractive développée en langage R et la librairie shiny, qui permet le chargement des fichiers de données de différents formats,le prétraitement ,l'exploration et la visualisation des données, réalisation des calculs statistiques ainsi qu'une partie d'apprentissage automatique .Et donc cet outil se base sur deux axes :Analyse descriptive(Univariée et Bivariée) et explicative des données (des modéles de machine Learning)
 
 Importation du fichier de données :
 
-           Importataion de différents types de fichiers (csv,txt,xlsx) avec différents séparateurs (virgule,espace,tabulation,point,point virgule)
-L'onglet dataset :
-           Affichage de la table de données avec le nombre de lignes et le nombre de colonnes 
+           Importataion de différents types de fichiers (csv,txt,xlsx,data...) avec différents séparateurs (virgule,espace,tabulation,point,point-virgule)
            
-L'onglet prétraitement de données : c'est l'ensemble de méthodes ou de processus de traitement de données brutes afin de les rendre fiables ,exploitables et utiles  dans des éventuels modéles d'apprentissage automatique 
+L'onglet Dataset :
+           Affichage de la table de données avec le nombre de lignes et de colonnes 
+           
+L'onglet prétraitement de données : c'est l'ensemble de méthodes ou de processus de traitement de données brutes afin de les rendre fiables ,exploitables et utiles  dans des éventuels modéles d'apprentissage automatique .
 
-       Identification et traitement des valeurs abéranntes :l'utilisateur décide de garder ou supprimer la colonne 
+       Identification et traitement des valeurs abéranntes :l'utilisateur décide de garder ou supprimer l'observation
        
        Identification et traitement des valeurs manquantes :
        
@@ -23,19 +24,21 @@ L'onglet prétraitement de données : c'est l'ensemble de méthodes ou de proces
         
         Dummification des variables catégorielles
         
-L'onglet Tests statistiques :
-
-        Tests statistiques entre deux variables : A-D Test,Shapiro,KS-Test,MV-Shapiro
-        
-        Corrélation entre deux variables :Covariance,KarlPearson,Spearman,Kendals
-        
-Exploration de données :
+Exploration des données :
 
         Summary détaillé du jeu de données 
         
         Heatmap de corrélation entre toute les variables du dataset importé
         
-        Fouille des données : détailler les types des variables et leurs noms
+        Fouille des données : détail des types des variables et la possibiliter de les renommer 
+
+        
+L'onglet Tests statistiques sur les variables quantitatives:
+
+        Tests statistiques: A-D Test,Shapiro,KS-Test,MV-Shapiro
+        
+        Corrélation:Covariance,KarlPearson,Spearman,Kendals
+        
 
 L'onglet Analyse Univariée :
 
@@ -53,9 +56,11 @@ L'onglet Analyse Univariée :
                     
                 Qualitative:
                 
-                    Numérique : modalités, effectifs, proportions 
+                    Numérique : modalités, effectifs, fréquences 
                     
-                    Diagramme en barres : en effectifs ou en proportions
+                    Diagramme en secteurs
+                    
+                    Diagramme en colonnes 
                     
   L'onglet Analyse Bivariée:
   
@@ -65,35 +70,35 @@ L'onglet Analyse Univariée :
                       
                       Histogramme
                       
-                      Histogramme dos a dos
+                      Nuage de points et Histogramme
+                      
+                      Histogramme dos à dos
                       
                 2 Qualitatives:
                 
-                      Diagramme en barres : empilées ou séparées, en effectifs ou en fréquences
+                      Diagramme en barres 
+                      
+                      Les indices Chi2(X2), Phi2 et Cramer
                       
                 Quantitative vs qualitative :
                 
-                        Numérique : même informations que pour une variable quantitative, mais pour chaque modalité
+                        Diagramme en barres
                         
-                        Histogramme
-                        
-                        Boîtes à moustaches
-                       
-                        Fréquences cumulées
+                        Boite en paralléle
                         
                         
  L'onglet Machine Learning :
  
-        Le dataset choisi :Employee Attrition qui partie des datasets proposés dans le module de Machine Learning et comme on y est entrain de travailler avec le language Python, on s'est dit pourquoi pas faire son équivalent en language R pour faire l'équilibre entre les deux languages .En effet , on estime que notre choix est bon car il nous permis de faire le lien entre les différentes fonctions d'apprentissage automatique de Python et R .
+        Le dataset choisi :Employee Attrition qui fait partie des datasets proposés dans le module de Machine Learning et sur lequel entrain de travailler avec le langage Python, on s'est dit pourquoi pas faire son équivalent en langage R pour équilibrer entre les deux langages .En effet , on estime que notre choix est bon car il nous permet de faire le lien entre les différentes fonctions d'apprentissage automatique disponibles en Python et R .
         
         les modéles choisis : Random Forest ,Decision Tree , Logistic Regression , Naive Bayes ,LDA,KNN et SVM 
         
         pour chaque modéle , on calcule Precision , Recall et F-score , courbe PR et auc selon la précision et le Recall déja calculés
         
-        A paramétrer : la portion du Test et du Train set+ over_sampling ,under samling ou sans -sampling 
+        A paramétrer : la portion du Test et du Train set+ over_sampling ,under samling ou sans-sampling 
         
  L'onglet Features Selection :
  
-       Pour chaque modéle cité précédemment , on essaye de générer un summary (statistiques) sur l'étape d'apprentissage du modéle sur nos données , pour détérminer le poids que chaque Feature dans ce modéle et puis décider des variables les plus discriminantes (explicatives ou importantes).
+       Pour chaque modéle cité précédemment , on essaye de générer un summary (statistiques) sur l'étape d'apprentissage du modéle sur nos données , pour détérminer le poids de chaque Feature dans ce modéle et puis décider des variables les plus discriminantes (explicatives ou importantes).
         
 
