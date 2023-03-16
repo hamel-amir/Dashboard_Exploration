@@ -2794,7 +2794,7 @@ shinyApp(
     
     output$Acc_LR <- renderText({
       set.seed(3000)
-      dataset = one_hot()
+      dataset = balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -2809,7 +2809,7 @@ shinyApp(
     })
     output$Rec_LR <- renderText({
       set.seed(3000)
-      dataset =one_hot()
+      dataset =balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
@@ -2822,7 +2822,7 @@ shinyApp(
     })
     output$f_score_LR <- renderText({
       set.seed(3000)
-      dataset =one_hot()
+      dataset =balanced_trainset()
       dataset=na.omit(dataset)
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
@@ -2835,7 +2835,7 @@ shinyApp(
     })
     output$classification_lr <- renderPlot({
       set.seed(3000)
-      dataset = one_hot()
+      dataset = balanced_trainset()
       split=sample.split(dataset$Attrition,SplitRatio = input$trainsplit)
       train=subset(dataset,split==T)
       test=subset(dataset,split==F)
