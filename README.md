@@ -100,5 +100,52 @@ L'onglet Analyse Univariée :
  L'onglet Features Selection :
  
        Pour chaque modéle cité précédemment , on essaye de générer un summary (statistiques) sur l'étape d'apprentissage du modéle sur nos données , pour détérminer le poids de chaque Feature dans ce modéle et puis décider des variables les plus discriminantes (explicatives ou importantes).
+       
+       
+       
+       
+Quelques remarques issues des analyses univariée et bivariée du jeu de données:
+
+                      Notre dataset est désiquilibré , car 84% des observavtions appartiennet a la classe No et seulement 16% qui apparteiennet a la classe Yes
+
+                      Les jeunes ont tendance à avoir des taux d'attrition plus élevés.
+
+                      Le département des ventes a le taux d'attrition le plus élevé, les ressources humaines étant légèrement inférieures à celui-ci.
+
+                      La proportion d'employés qui ont quitté était comparativement moindre parmi les employés senior. Peut-être que ces employés étaient à une autorité supérieure et étaient moins susceptibles de quitter ce poste.
+
+                      Suivent les employés à mi-carrière, les niveaux d'attrition parmi les employés les plus récents et les moins expérimentés semblent être les plus élevés. Ces salariés sont peut-être partis pour des offres plus lucratives ou des études supérieures.
+
+                      Une attrition majeure s'est produite parmi les employés à mi-carrière. Le changement de carrière et la croissance de carrière pourraient être l'une des possibilités d'un tel niveau d'attrition.
+
+                      L'âge des employés varie entre 18 et 60 ans, ce qui semble être intuitivement vrai car l'âge de travail sans restriction commence principalement entre 18 et 60 ans. 
+
+                      La plupart des employés restent plus près de l'emplacement du bureau.
+
+                      Il y a une proportion plus élevée d'employés churner qui restent loin du bureau (Plus de 10 KM) que la proportion d'employés qui n'ont pas quitté l'entreprise et restent loin du bureau.
+
+                      Parmi les employés occupant divers postes, la distance moyenne entre le travail et le domicile pour les employés des représentants de la santé, les employés des ressources humaines, les gestionnaires et les cadres commerciaux qui ont quitté l'entreprise est supérieure à la distance moyenne entre le travail et le domicile pour les employés qui ne sont pas partis .
+
+Modéles de classifications :
+
+   En se basant sur les différentes variables, en en convertissant la variable catégorielle Attrition en une variable numérique discrète, nous divisons notre base de données en deux sous-ensembles : entraînement et test. Nous utilisons un esemble de modéles de classifications  :
+a.	Random Forest : le meilleur résultat obtenu en choisissant 14 voisons est un taux de bonne prédiction de 80% ;
+
+b.	Logistic Regression : un taux de bonne prédiction 79% ;
+
+c.	SVM : le meilleur résultat a été obtenu avec le kernel linear avec un taux de bonne prédiction de 85.31% ;
+
+d.	Decision Tree : le meilleur résultat obtenu avec un taux de prédiction d’environ 70.00%.
+
+e.    LDA,KNN,Naive Bayes  :les meilleurs résultats obtenu avec des taux de bonne prédiction qui varie entre 60-70%.
+
+Les meilleurs algorithmes sont le SVM et le Random Forest. 
+
+
+
+
+
+
+
         
 
