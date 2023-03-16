@@ -129,17 +129,17 @@ Quelques remarques issues des analyses univariée et bivariée du jeu de donnée
 Modéles de classifications :
 
    En se basant sur les différentes variables, en en convertissant la variable catégorielle Attrition en une variable numérique discrète, nous divisons notre base de données en deux sous-ensembles : entraînement et test. Nous utilisons un esemble de modéles de classifications  :
-a.	Random Forest : le meilleur résultat obtenu en choisissant 14 voisons est un taux de bonne prédiction de 80% ;
+                      a.	Random Forest : le meilleur résultat obtenu en choisissant 14 voisons est un taux de bonne prédiction de 80% ;
 
-b.	Logistic Regression : un taux de bonne prédiction 79% ;
+                      b.	Logistic Regression : un taux de bonne prédiction 79% ;
 
-c.	SVM : le meilleur résultat a été obtenu avec le kernel linear avec un taux de bonne prédiction de 85.31% ;
+                      c.	SVM : le meilleur résultat a été obtenu avec le kernel linear avec un taux de bonne prédiction de 85.31% ;
 
-d.	Decision Tree : le meilleur résultat obtenu avec un taux de prédiction d’environ 70.00%.
+                      d.	Decision Tree : le meilleur résultat obtenu avec un taux de prédiction d’environ 70.00%.
 
-e.    LDA,KNN,Naive Bayes  :les meilleurs résultats obtenu avec des taux de bonne prédiction qui varie entre 60-70%.
+                      e.    LDA,KNN,Naive Bayes  :les meilleurs résultats obtenu avec des taux de bonne prédiction qui varie entre 60-70%.
 
-Les meilleurs algorithmes sont le SVM et le Random Forest. 
+  Les meilleurs algorithmes sont le SVM et le Random Forest. 
 
 
 
