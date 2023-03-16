@@ -159,7 +159,7 @@ library(Metrics)
 options(warn=-1)
 shinyApp(
   ui = dashboardPage(
-    dashboardHeader(),
+    dashboardHeader(title = "Data Exploration"),
     dashboardSidebar(
       
       
@@ -167,11 +167,11 @@ shinyApp(
                 accept = c("text/plain", ".csv/.data/.xls/.tsv")
       ),
       
-      downloadButton("Download", "Download"),
+      downloadButton("Download", "Télécharger Dataset"),
       radioButtons("sep", label = "Séparateur", 
                    c("point-virgule" = ";", "virgule" = ",", "espace" = " ", "tabulation" = "\t", "point" = ".")),
       
-      actionButton("button", "intial Dataset"),
+      actionButton("button", "rénitialisation Dataset"),
       
       # radioButtons("fichierSep", label = "SÃ©parateur", 
       #              c("point-virgule" = ";", "virgule" = ",", "espace" = " ", "tabulation" = "\t", "autre" = "autre")),
@@ -190,15 +190,15 @@ shinyApp(
         menuItem("Dataset", tabName = "Dataset", icon = icon("table")),
         menuItem("Prétraitement des données", tabName = "Pd", icon = icon("table"),
                  menuSubItem("valeurs manquantes", tabName = "imp", icon=icon("dice-one")),
-                 menuSubItem("Valeurs aberrantes", tabName = "out", icon=icon("dice-one")),
+                 menuSubItem("Valeurs abérrantes", tabName = "out", icon=icon("dice-one")),
                  menuSubItem("Normalisation", tabName = "nm", icon=icon("dice-one")),
                  menuSubItem("Dummification", tabName = "dm", icon=icon("dice-one")),
-                 menuSubItem("déséquilibre des classes", tabName = "rb", icon=icon("dice-one"))
+                 menuSubItem("Déséquilibre des classes", tabName = "rb", icon=icon("dice-one"))
         ),
         menuItem("Exploration de données", tabName = "exp", icon = icon("table"),
-                 menuSubItem("Fouille de données", tabName = "f", icon = icon("table")),
-                 menuSubItem("Summury", tabName = "Sm", icon = icon("table")),
-                 menuSubItem("corrélation", tabName = "cr", icon=icon("dice-one"))
+                 menuSubItem("Types des données", tabName = "f", icon = icon("table")),
+                 menuSubItem("Summury détaillé", tabName = "Sm", icon = icon("table")),
+                 menuSubItem("Corrélations", tabName = "cr", icon=icon("dice-one"))
                  
                  
         ),
@@ -218,13 +218,9 @@ shinyApp(
                  menuSubItem("Qualitative VS Qualitative", tabName = "vs2", icon=icon("chart-pie"))
         ),
         
-        menuItem("Modeles de classification", tabName="models", icon=icon("chart-line"),
-                 menuSubItem("Regression Linear", tabName = "Rg", icon=icon("dice-one"))
-                 #menuSubItem("Reduction de dimension", tabName = "Rd", icon=icon("dice-one"))
-                 
-        ),
-        menuItem("Maching Learning", tabName="ml", icon=icon("chart-line")),
-        menuItem("Features Selection", tabName = "classification",icon=icon("dashboard"))
+        menuItem("Modeles de classification", tabName="ml", icon=icon("chart-line")),
+        menuItem("Features Selection", tabName = "classification",icon=icon("dashboard")),
+        menuItem("Regression Linéaire", tabName="Rg", icon=icon("dice-one"))
         
         #menuItem("UnivariÃ©e", tabName = "Unv", icon = icon("table"))
         
@@ -711,7 +707,7 @@ shinyApp(
                         plotOutput(outputId = "effectifsDiag")
                       ),
                       box(
-                        title = "Boite aux moustaches", status = "primary", solidHeader = TRUE,
+                        title = "Boite a moustaches", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE,
                         plotOutput(outputId = "boiteMoustaches")
                       )
@@ -3389,11 +3385,11 @@ shinyApp(
     # Statistical Tests
     
     output$cols7<- renderUI({
-      selectInput('cols7', 'Choisir une variable ',colnames(data()))
+      selectInput('cols7', 'Choisir une variable ',names(data())[!grepl('factor|logical|character',sapply(data(),class))])
       
     })
     output$cols8<- renderUI({
-      selectInput('cols8', 'Choisir une variable ',colnames(data()))
+      selectInput('cols8', 'Choisir une variable ',names(data())[!grepl('factor|logical|character',sapply(data(),class))])
       
     })
     
@@ -3450,11 +3446,11 @@ shinyApp(
     # correlation & regression 
     
     output$cols9<- renderUI({
-      selectInput('cols9', 'Choisir une variable ',colnames(data()))
+      selectInput('cols9', 'Choisir une variable ',names(data())[!grepl('factor|logical|character',sapply(data(),class))])
       
     })
     output$cols10<- renderUI({
-      selectInput('cols10', 'Choisir une variable ',colnames(data()))
+      selectInput('cols10', 'Choisir une variable ',names(data())[!grepl('factor|logical|character',sapply(data(),class))])
       
     })
     
