@@ -197,7 +197,7 @@ shinyApp(
         ),
         menuItem("Exploration de données", tabName = "exp", icon = icon("table"),
                  menuSubItem("Types des données", tabName = "f", icon = icon("table")),
-                 menuSubItem("Summury détaillé", tabName = "Sm", icon = icon("table")),
+                 menuSubItem("Summary détaillé", tabName = "Sm", icon = icon("table")),
                  menuSubItem("Corrélations", tabName = "cr", icon=icon("dice-one"))
                  
                  
@@ -220,7 +220,7 @@ shinyApp(
         
         menuItem("Modeles de classification", tabName="ml", icon=icon("chart-line")),
         menuItem("Features Selection", tabName = "classification",icon=icon("dashboard")),
-        menuItem("Regression Linéaire", tabName="Rg", icon=icon("dice-one"))
+        menuItem("Régression", tabName="Rg", icon=icon("dice-one"))
         
         #menuItem("UnivariÃ©e", tabName = "Unv", icon = icon("table"))
         
@@ -1293,7 +1293,7 @@ shinyApp(
       })
       
       # la mÃ©thode IQR choisie pour determniner les outliers
-      output$amir<-renderText("hamel amir")
+      
       
       # output$caract_quantitative <- renderTable({
       #   
@@ -3553,6 +3553,12 @@ shinyApp(
         
         
         
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3> Machine learning: </h3>"),
+        paste("<h4>-Le dataset choisi :Employee Attrition qui fait partie des datasets proposés dans le module de Machine Learning et sur lequel entrain de travailler avec le langage Python, on s'est dit pourquoi pas faire son équivalent en langage R pour équilibrer entre les deux langages .En effet , on estime que notre choix est bon car il nous permet de faire le lien entre les différentes fonctions d'apprentissage automatique disponibles en Python et R </h4>"),
+        paste("<h4>-les modéles choisis : Random Forest ,Decision Tree , Logistic Regression , Naive Bayes ,LDA,KNN et SVM </h4>"),
+        paste("<h4>-pour chaque modéle , on calcule Precision , Recall et F-score , courbe PR et auc selon la précision et le Recall déja calculés</h4>"),
+        paste("<h4>-A paramétrer : la portion du Test et du Train set+ over_sampling ,under samling ou sans-sampling</h4>"),
         paste("<h3>---------------------------------------------------------------------------------</h3>"),
         paste("<h3> 8 L'onglet Modeles de classification ( Dataset: Employee attrition): </h3>"),
         paste("<h4>En se basant sur les différentes variables, en en convertissant la variable catégorielle Attrition en une variable numérique discrète, nous divisons notre base de données en deux sous-ensembles : entraînement et test. Nous utilisons un esemble de modéles de classifications : a. Random Forest : le meilleur résultat obtenu en choisissant 14 voisons est un taux de bonne prédiction de 80%:
