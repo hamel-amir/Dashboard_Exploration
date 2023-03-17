@@ -3582,8 +3582,8 @@ L'âge des employés varie entre 18 et 60 ans, ce qui semble être intuitivement
 La plupart des employés restent plus près de l'emplacement du bureau.</h4>"),
         paste("<h4>- Il y a une proportion plus élevée d'employés churner qui restent loin du bureau (Plus de 10 KM) que la proportion d'employés qui n'ont pas quitté l'entreprise et restent loin du bureau.
 
-                  Parmi les employés occupant divers postes, la distance moyenne entre le travail et le domicile pour les employés des représentants de la santé, les employés des ressources humaines, les gestionnaires et les cadres commerciaux qui ont quitté l'entreprise est supérieure à la distance moyenne entre le travail et le domicile pour les employés qui ne sont pas partis .</h4>")
-         
+              .</h4>"),
+      paste("<h4>-Parmi les employés occupant divers postes, la distance moyenne entre le travail et le domicile pour les employés des représentants de la santé, les employés des ressources humaines, les gestionnaires et les cadres commerciaux qui ont quitté l'entreprise est supérieure à la distance moyenne entre le travail et le domicile pour les employés qui ne sont pas partis </h4>"),
       )
     })
     
