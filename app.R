@@ -232,8 +232,14 @@ shinyApp(
     ),
     dashboardBody(
       tabItems(
-        tabItem(tabName = "Accueil",
+        tabItem(tabName = "accueill",
                 fluidPage(
+                  tabPanel("Statistical Tests", 
+                           box(width = 12, title="Rapport",status = "success",solidHeader = TRUE,
+                           htmlOutput("rapport")
+                           )
+                           
+                  )
                 )
         ),
         tabItem(tabName = "stest",
@@ -3482,6 +3488,104 @@ shinyApp(
     
     
     
+    
+    output$rapport<- renderUI({
+      HTML(
+      
+        paste("<h4>Application web intéractive développée en langage R et la librairie shiny, qui permet le chargement des fichiers de données de différents formats,le prétraitement ,l'exploration et la visualisation des données, réalisation des calculs statistiques ainsi qu'une partie d'apprentissage automatique .Et donc cet outil se base sur deux axes :Analyse descriptive(Univariée et Bivariée) et explicative des données (des modéles de machine Learning)</h4>" ),
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>  1.Importation du fichier de données : </h3>"),
+        paste("<h4>  Importataion de différents types de fichiers (csv,txt,xlsx,data...) avec différents séparateurs (virgule,espace,tabulation,point,point-virgule)</h4>"),
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>  2.L'onglet Dataset :</h3>"),
+        paste("<h4>Affichage de la table de données avec le nombre de lignes et de colonnes </h4>"),
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>3.L'onglet prétraitement de données : </h3>"),
+        paste("<h4>c'est l'ensemble de méthodes ou de processus de traitement de données brutes afin de les rendre fiables ,exploitables et utiles  dans des éventuels modéles d'apprentissage automatique .</h4>"),
+        paste("<h4> a. Identification et traitement des valeurs abéranntes :l'utilisateur décide de garder ou supprimer l'observation </h4>"),
+        paste("<h4> b. Identification et traitement des valeurs manquantes :
+        
+            </h4>"),
+        paste("<h4> b.1  Variable quantitative : moyenne , médiane ,interpolation ou suppression de la variable</h4>"),
+        paste("<h4> b.2  V     Variable qualitative : mode , dernière valeur rencontrée , suppression de la variable </h4>"),
+        paste("<h4> c.Normalisation des données: Min_Max , Z_score </h4>"),
+        paste("<h4> c.Normalisation des données: Min_Max , Z_score </h4>"),
+        paste("<h4> d.Dummification des variables catégorielles</h4>"),
+        paste("<h4> e.Réequilibrage des données : over_sampling ,under_sampling</h4>"),
+        
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>4.Exploration des données : </h3>"),
+        paste("<h4> a.Summary détaillé du jeu de données  </h4>"),
+        paste("<h4> b.Heatmap de corrélation entre toutes les variables du dataset importé</h4>"),
+        paste("<h4> c.Fouille des données : détail des types des variables et la possibiliter de les renommer </h4>"),
+        
+        paste("<h3>5.L'onglet Tests statistiques sur les variables quantitatives:</h3>"),
+        paste("<h4>a. Tests statistiques: A-D Test,Shapiro,KS-Test,MV-Shapiro</h4>"),
+        paste("<h4>b. Corrélation:Covariance,KarlPearson,Spearman,Kendals</h4>"),
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>6.L'onglet Analyse Univariée : </h3>"),
+        paste("<h4>6.1 Quantitative:</h4>"),
+        paste("<h4>-Numérique (caractéristiques de tendance centrale et de dispersion) : moyenne, écart-type, variance, minimum, Q1, médiane, Q3, maximum </h4>"),
+        paste("<h4>-Histogramme des éffectifs</h4>"),
+        paste("<h4>-Boîte à moustache</h4>"),
+        paste("<h4>-Diagramme de battons des éffectifs</h4>"),
+        paste("<h4>-Courbe cumulative </h4>"),
+        
+        paste("<h4>6.2 Qualitative:</h4>"),
+        paste("<h4>-Numérique : modalités, effectifs, fréquences </h4>"),
+        paste("<h4>-Diagramme en secteurs </h4>"),
+        paste("<h4>-Diagramme en colonnes </h4>"),
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>7.L'onglet Analyse Bivariée:</h3>"),
+        paste("<h4>7.1 Quantitatives:</h4>"),
+        paste("<h4>- Nuage de points </h4>"),
+        paste("<h4>-Histogramme </h4>"),
+        paste("<h4>-Nuage de points et Histogramme</h4>"),
+        paste("<h4>- Histogramme dos à dos</h4>"),
+        
+        paste("<h4>7.2 Qualitatives:</h4>"),
+        paste("<h4>-Diagramme en barres  </h4>"),
+        paste("<h4>-Les indices Chi2(X2), Phi2 et Cramer </h4>"),
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h4>7.3 Quantitative vs qualitative :</h4>"),
+        paste("<h4>-Diagramme en barres</h4>"),
+        paste("<h4>-Boite en paralléle</h4>"),
+        
+        
+        
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3> 8 L'onglet Modeles de classification ( Dataset: Employee attrition): </h3>"),
+        paste("<h4>En se basant sur les différentes variables, en en convertissant la variable catégorielle Attrition en une variable numérique discrète, nous divisons notre base de données en deux sous-ensembles : entraînement et test. Nous utilisons un esemble de modéles de classifications : a. Random Forest : le meilleur résultat obtenu en choisissant 14 voisons est un taux de bonne prédiction de 80%:
+</h4>"),
+        paste("<h4>-Logistic Regression : un taux de bonne prédiction 79%</h4>"),
+        paste("<h4>-SVM : le meilleur résultat a été obtenu avec le kernel linear avec un taux de bonne prédiction de 85.31% </h4>"),
+        paste("<h4>-Decision Tree : le meilleur résultat obtenu avec un taux de prédiction d’environ 70.00%.
+</h4>"),
+        paste("<h4>-LDA,KNN,Naive Bayes  :les meilleurs résultats obtenu avec des taux de bonne prédiction qui varie entre 60-70%.
+</h4>"),
+        paste("<h4>-Les meilleurs algorithmes sont le SVM et le Random Forest.
+</h4>"),
+        
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>9.L'onglet Features Selection :</h3>"),
+        paste("<h4>Pour chaque modéle cité précédemment , on essaye de générer un summary (statistiques) sur l'étape d'apprentissage du modéle sur nos données , pour détérminer le poids de chaque Feature dans ce modéle et puis décider des variables les plus discriminantes (explicatives ou importantes).
+</h4>"),
+        paste("<h3>---------------------------------------------------------------------------------</h3>"),
+        paste("<h3>10. Quelques remarques issues des analyses univariée et bivariée du jeu de données Employee attrition:</h3>"),
+        paste("<h4>- Notre dataset est désiquilibré , car 84% des observavtions appartiennet a la classe No et seulement 16% qui apparteiennet a la classe Yes</h4>"),
+        paste("<h4>-Les jeunes ont tendance à avoir des taux d'attrition plus élevés.</h4>"),
+        paste("<h4>-Le département des ventes a le taux d'attrition le plus élevé, les ressources humaines étant légèrement inférieures à celui-ci.</h4>"),
+        paste("<h4>-La proportion d'employés qui ont quitté était comparativement moindre parmi les employés senior. Peut-être que ces employés étaient à une autorité supérieure et étaient moins susceptibles de quitter ce poste.
+Suivent les employés à mi-carrière, les niveaux d'attrition parmi les employés les plus récents et les moins expérimentés semblent être les plus élevés. Ces salariés sont peut-être partis pour des offres plus lucratives ou des études supérieures.
+ Une attrition majeure s'est produite parmi les employés à mi-carrière. Le changement de carrière et la croissance de carrière pourraient être l'une des possibilités d'un tel niveau d'attrition.
+L'âge des employés varie entre 18 et 60 ans, ce qui semble être intuitivement vrai car l'âge de travail sans restriction commence principalement entre 18 et 60 ans. 
+La plupart des employés restent plus près de l'emplacement du bureau.</h4>"),
+        paste("<h4>- Il y a une proportion plus élevée d'employés churner qui restent loin du bureau (Plus de 10 KM) que la proportion d'employés qui n'ont pas quitté l'entreprise et restent loin du bureau.
+
+                  Parmi les employés occupant divers postes, la distance moyenne entre le travail et le domicile pour les employés des représentants de la santé, les employés des ressources humaines, les gestionnaires et les cadres commerciaux qui ont quitté l'entreprise est supérieure à la distance moyenne entre le travail et le domicile pour les employés qui ne sont pas partis .</h4>")
+         
+      )
+    })
     
     
     
