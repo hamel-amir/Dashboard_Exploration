@@ -144,6 +144,8 @@ Modéles de classifications :
 
 
 
+# Lien de l'application déployée :
+https://hamel-amir.shinyapps.io/Projet_web/
 
 
 
